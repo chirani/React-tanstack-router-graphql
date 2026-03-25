@@ -25,6 +25,7 @@ export const GET_STORE_DATA = gql`
       inStock
       description
       brand
+      gallery
       attributes {
         id
         items {

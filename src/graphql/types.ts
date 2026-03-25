@@ -31,6 +31,7 @@ export interface Product {
   inStock: boolean;
   description: string;
   brand: string;
+  gallery: string[];
   attributes: Attribute[];
   prices: Price[];
   __typename: string;
