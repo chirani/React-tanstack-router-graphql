@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useStoreData } from '../queries/categories';
 import ProductCard from '../components/ProductCard';
+import { useEffect } from 'react';
+import { useStoreCategory } from '../zustand/category';
 
 type IndexSearch = {
   category?: string;
@@ -17,8 +19,15 @@ export const Route = createFileRoute('/')({
 
 function Index() {
   const search = Route.useSearch();
+  const { updateCateogryId } = useStoreCategory();
   const { data, isSuccess } = useStoreData(search.category ?? 'all');
   const ProductList = isSuccess ? data.products : [];
+
+  useEffect(() => {
+    if (search.category) {
+      updateCateogryId(search.category);
+    }
+  }, [search.category]);
 
   return (
     <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-300 my-12 mx-auto">
