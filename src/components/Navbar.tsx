@@ -6,15 +6,20 @@ import { Anchor, ShoppingBag } from 'lucide-react';
 const Navbar = () => {
   const { data, isSuccess } = useCategories();
   const categories = isSuccess ? data.categories : [];
+  const IndexSearch = {
+    category: 'all',
+  };
 
   return (
-    <nav className="flex flex-row px-4 shadow-xs">
+    <nav className="flex flex-row px-4 sticky top-0 z-50 bg-white shadow-xs">
       <div className="flex gap-4 flex-1">
         {categories.map((category) => {
           return (
             <Link
+              key={category.id}
               to="/"
-              className="p-4 order-b-3 text-zinc-900 border-white hover:text-zinc-400"
+              className={`p-4 ${IndexSearch.category === category.id ? 'border-b-3 border-teal-600' : 'text-zinc-900'} hover:opacity-40`}
+              search={{ category: category.id }}
             >
               {capitalizeFirstLetter(category.name)}
             </Link>
@@ -26,7 +31,7 @@ const Navbar = () => {
       </div>
       <div className="flex-1 flex flex-row-reverse items-center px-4">
         <ShoppingBag
-          className="text-zinc-900 cursor-pointer hover:opacity-60"
+          className="text-zinc-900 cursor-pointer hover:text-teal-600 hover:opacity-60"
           size={28}
         />
       </div>
