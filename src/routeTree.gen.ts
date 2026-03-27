@@ -11,7 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ProductIdRouteImport } from './routes/product.$id'
+import { Route as ProductIdRouteImport } from './routes/product/$id'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',

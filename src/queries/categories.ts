@@ -1,7 +1,15 @@
 import { request } from 'graphql-request';
 import { useQuery } from '@tanstack/react-query';
-import { type Category, type ProductDataResponse } from '../graphql/types';
-import { GET_CATEGORIES, GET_STORE_DATA } from '../graphql/graph';
+import {
+  type Category,
+  type Product,
+  type ProductDataResponse,
+} from '../graphql/types';
+import {
+  GET_CATEGORIES,
+  GET_PRODUCT_DATA,
+  GET_STORE_DATA,
+} from '../graphql/graph';
 
 const endpoint = 'http://localhost:8080/api/graphql';
 
@@ -12,6 +20,21 @@ export function useStoreData(categoryName: string) {
       request<ProductDataResponse>(endpoint, GET_STORE_DATA, {
         categoryName,
       }),
+  });
+}
+
+interface ProductsData {
+  product: Product[];
+}
+
+export function useProductData(productId: string) {
+  return useQuery<ProductsData>({
+    queryKey: ['product', productId],
+    queryFn: async () => {
+      return request<ProductsData>(endpoint, GET_PRODUCT_DATA, {
+        productId,
+      });
+    },
   });
 }
 

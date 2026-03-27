@@ -1,11 +1,11 @@
-interface AttributeItem {
+export interface AttributeItem {
   id: string;
   value: string;
   displayValue: string;
   __typename: string;
 }
 
-interface Attribute {
+export interface Attribute {
   id: string;
   items: AttributeItem[];
   __typename: string;

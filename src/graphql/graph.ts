@@ -48,3 +48,39 @@ export const GET_STORE_DATA = gql`
     }
   }
 `;
+
+export const GET_PRODUCT_DATA = gql`
+  query GetStoreData($productId: String!) {
+    product(productId: $productId) {
+      id
+      name
+      category
+      inStock
+      description
+      brand
+      gallery
+      attributes {
+        id
+        items {
+          id
+          value
+          displayValue
+          __typename
+        }
+        __typename
+      }
+      prices {
+        id
+        amount
+        __typename
+        currency {
+          symbol
+          label
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+  }
+`;
