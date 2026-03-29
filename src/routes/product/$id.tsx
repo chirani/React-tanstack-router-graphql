@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useProductData } from '../../queries/categories';
 import type { Attribute, AttributeItem } from '../../graphql/types';
 import { getPreviewText } from '../../utils/strings';
+import { useCartStore, type AttributeSelection } from '../../zustand/cart';
 
 export const Route = createFileRoute('/product/$id')({
   component: RouteComponent,
@@ -11,6 +12,7 @@ export const Route = createFileRoute('/product/$id')({
 function RouteComponent() {
   const params = Route.useParams();
   const { data, isSuccess, isLoading } = useProductData(params.id);
+  const { addToCart } = useCartStore();
   const [selectedImage, setSelectedImage] = useState('');
   const [isFullDescription, toggleFullDescription] = useState(false);
   const [selectedAttributes, setSelectedAttributes] = useState<
@@ -40,9 +42,27 @@ function RouteComponent() {
 
   const product = products[0];
 
+  const onAddToCart = () => {
+    const attrs: AttributeSelection[] = [];
+
+    for (const key in selectedAttributes) {
+      attrs.concat({
+        attributeId: key,
+        attributeValueId: selectedAttributes[key],
+      });
+    }
+
+    addToCart({
+      productId: product.id,
+      name: product.name,
+      price: product.prices[0],
+      attributes: attrs,
+      quantity: 1,
+    });
+  };
+
   return (
     <main className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10">
-      {/* Image Gallery */}
       <div>
         <figure className="aspect-square w-full overflow-hidden rounded-md">
           <img
@@ -64,13 +84,11 @@ function RouteComponent() {
         </div>
       </div>
 
-      {/* Product Info */}
       <div className="flex flex-col gap-4">
         <h1 className="text-2xl font-semibold">{product.name}</h1>
 
         <p className="text-xl font-bold">${product.prices[0].amount}</p>
 
-        {/* Attributes */}
         {product.attributes?.map((attr: Attribute) => (
           <div key={attr.id}>
             <p className="font-medium mb-2">{attr.id}</p>
@@ -105,7 +123,11 @@ function RouteComponent() {
         >
           {isFullDescription ? 'Show Less' : 'Show More'}
         </button>
-        <button className="mt-4 bg-black text-white py-3 rounded hover:opacity-80">
+        <button
+          disabled={!product.inStock}
+          onMouseDown={() => onAddToCart()}
+          className="mt-4 bg-black disabled:bg-zinc-300 cursor-pointer text-white py-3 rounded hover:opacity-80"
+        >
           Add to Cart
         </button>
       </div>

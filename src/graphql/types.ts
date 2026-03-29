@@ -17,7 +17,7 @@ interface Currency {
   __typename: string;
 }
 
-interface Price {
+export interface Price {
   id: string;
   amount: number;
   currency: Currency;

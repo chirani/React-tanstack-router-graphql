@@ -3,6 +3,7 @@ import { useCategories } from '../queries/categories';
 import { capitalizeFirstLetter } from '../utils/strings';
 import { Anchor, ShoppingBag } from 'lucide-react';
 import { useStoreCategory } from '../zustand/category';
+import CartDropdown from './CartDropdown';
 
 const Navbar = () => {
   const { id: categoryId } = useStoreCategory();
@@ -29,10 +30,7 @@ const Navbar = () => {
         <Anchor className="text-teal-400" />
       </div>
       <div className="flex-1 flex flex-row-reverse items-center px-4">
-        <ShoppingBag
-          className="text-zinc-900 cursor-pointer hover:text-teal-600 hover:opacity-60"
-          size={28}
-        />
+        <CartDropdown />
       </div>
     </nav>
   );
