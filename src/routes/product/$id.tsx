@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useProductData } from '../../queries/categories';
 import type { Attribute, AttributeItem } from '../../graphql/types';
 import { getPreviewText } from '../../utils/strings';
-import { useCartStore, type AttributeSelection } from '../../zustand/cart';
+import { useCartStore } from '../../zustand/cart';
 
 export const Route = createFileRoute('/product/$id')({
   component: RouteComponent,
@@ -19,6 +19,18 @@ function RouteComponent() {
     Record<string, string>
   >({});
 
+  useEffect(() => {
+    if (data?.product.length) {
+      let attrs = data.product[0]?.attributes;
+      attrs.map((attr) => {
+        setSelectedAttributes((prev) => ({
+          ...prev,
+          [attr.id]: attr.items[0].id,
+        }));
+      });
+    }
+  }, [data]);
+
   const products = isSuccess ? data.product : [];
 
   const handleSelect = (attrId: string, itemId: string) => {
@@ -33,24 +45,24 @@ function RouteComponent() {
   }
 
   if (!products.length) {
-    return <></>;
+    return <div className="my-12 text-center">404 Product not found</div>;
   }
 
-  if (!isSuccess || !data) {
+  if (!isSuccess) {
     return <div className="p-6">Product not found</div>;
   }
 
   const product = products[0];
 
   const onAddToCart = () => {
-    const attrs: AttributeSelection[] = [];
+    console.log(selectedAttributes);
 
-    for (const key in selectedAttributes) {
-      attrs.concat({
-        attributeId: key,
-        attributeValueId: selectedAttributes[key],
-      });
-    }
+    const attrs = Object.entries(selectedAttributes).map(
+      ([attributeId, attributeValueId]) => ({
+        attributeId,
+        attributeValueId,
+      })
+    );
 
     addToCart({
       productId: product.id,
@@ -58,6 +70,7 @@ function RouteComponent() {
       price: product.prices[0],
       attributes: attrs,
       quantity: 1,
+      productContent: product.gallery.length ? product.gallery[0] : '',
     });
   };
 

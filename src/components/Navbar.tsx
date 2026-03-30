@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { useCategories } from '../queries/categories';
 import { capitalizeFirstLetter } from '../utils/strings';
-import { Anchor, ShoppingBag } from 'lucide-react';
+import { Anchor } from 'lucide-react';
 import { useStoreCategory } from '../zustand/category';
 import CartDropdown from './CartDropdown';
 
@@ -9,6 +9,10 @@ const Navbar = () => {
   const { id: categoryId } = useStoreCategory();
   const { data, isSuccess } = useCategories();
   const categories = isSuccess ? data.categories : [];
+
+  const testAttributes = (isActive: boolean) => ({
+    'data-testid': isActive ? 'active-category-link' : 'category-link',
+  });
 
   return (
     <nav className="flex flex-row px-4 sticky top-0 z-50 bg-white shadow-xs">
@@ -20,6 +24,8 @@ const Navbar = () => {
               to="/"
               className={`p-4 ${category.id === categoryId ? 'border-b-3 border-teal-600' : 'text-zinc-900'} hover:opacity-40`}
               search={{ category: category.id }}
+              {...testAttributes}
+              {...testAttributes(category.id === categoryId)}
             >
               {capitalizeFirstLetter(category.name)}
             </Link>

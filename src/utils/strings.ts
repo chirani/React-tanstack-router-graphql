@@ -10,3 +10,12 @@ export const getPreviewText = (html: string, wordLimit = 200) => {
   const text = temp.textContent || temp.innerText || '';
   return text.split(/\s+/).slice(0, wordLimit).join(' ');
 };
+
+export const toKebabCase = (text: string): string => {
+  return text
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+};

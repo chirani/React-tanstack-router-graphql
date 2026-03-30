@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { useCartStore } from '../zustand/cart';
 import { ShoppingBag, Trash2 as Trash } from 'lucide-react';
+import { toKebabCase } from '../utils/strings';
+import { Link } from '@tanstack/react-router';
 
 const CartDropdown = () => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-
   const { cart, removeFromCart } = useCartStore();
 
   const total = cart.reduce(
@@ -26,7 +27,11 @@ const CartDropdown = () => {
 
   return (
     <div className="relative" ref={ref}>
-      <button onClick={() => setOpen(!open)} className="relative px-4 py-2">
+      <button
+        onClick={() => setOpen(!open)}
+        className="relative px-4 py-2"
+        data-testid="cart-btn"
+      >
         <ShoppingBag
           className="text-zinc-900 cursor-pointer hover:text-teal-600 hover:opacity-60"
           size={28}
@@ -41,37 +46,61 @@ const CartDropdown = () => {
 
           <div className="flex flex-col gap-3 max-h-60 overflow-y-auto">
             {cart.map((item, index) => (
-              <div key={index} className="border p-2">
-                <p className="font-semibold">{item.name}</p>
-                <p>${item.price.amount}</p>
-                <p>Qty: {item.quantity}</p>
+              <div
+                key={index}
+                data-testid={`cart-item-attribute-${toKebabCase(item.name)}`}
+              >
+                <div className="flex flex-row gap-3">
+                  <figure className="size-18 bg-red-200">
+                    <img src={item.productContent} className="w-full h-full" />
+                  </figure>
+                  <div className="flex flex-col flex-1">
+                    <p className="font-semibold">{item.name}</p>
+                    <div className="text-sm text-zinc-700 flex flex-col flex-wrap mb-2">
+                      {item.attributes.map((attr) => (
+                        <p
+                          key={attr.attributeId}
+                          className="font-medium text-xs"
+                          data-testid={`cart-item-attribute-${toKebabCase(item.name)}-${toKebabCase(attr.attributeId)}`}
+                        >
+                          {attr.attributeId}{' '}
+                          <span className="text-teal-700">
+                            {attr.attributeValueId}
+                          </span>
+                        </p>
+                      ))}
+                    </div>
+                    <p>${item.price.amount}</p>
 
-                <div className="text-sm text-gray-600">
-                  {item.attributes.map((attr, i) => (
-                    <p key={i}>
-                      {attr.attributeId}: {attr.attributeValueId}
-                    </p>
-                  ))}
+                    <div className="py-2 flex flex-row justify-between">
+                      <p>Qty: {item.quantity}</p>
+                      <Trash
+                        onClick={() => {
+                          removeFromCart(item);
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <Trash
-                  onClick={() => {
-                    removeFromCart(item);
-                  }}
-                />
               </div>
             ))}
           </div>
 
           <div className="mt-4 border-t pt-2 flex justify-between">
             <span>Total:</span>
-            <span className="font-bold">${total}</span>
+            <span className="font-bold" data-testid={'cart-item-amount'}>
+              ${Math.round(total * 100) / 100}
+            </span>
           </div>
 
-          <div className="flex gap-2 mt-3">
-            <button className="border px-3 py-2 w-full">View Cart</button>
-            <button className="bg-black text-white px-3 py-2 w-full">
+          <div className="flex mt-3">
+            <Link
+              disabled={!Boolean(total)}
+              to="/checkout"
+              className="bg-black text-center text-white px-3 py-2 w-full"
+            >
               Checkout
-            </button>
+            </Link>
           </div>
         </div>
       )}

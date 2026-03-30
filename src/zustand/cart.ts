@@ -8,6 +8,7 @@ export type AttributeSelection = {
 
 type CartItem = {
   productId: string;
+  productContent: string;
   name: string;
   price: Price;
   quantity: number;
