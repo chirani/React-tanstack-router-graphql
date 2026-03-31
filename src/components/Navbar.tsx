@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { useCategories } from '../queries/categories';
+import { useCategories } from '../queries/products';
 import { capitalizeFirstLetter } from '../utils/strings';
 import { Anchor } from 'lucide-react';
 import { useStoreCategory } from '../zustand/category';

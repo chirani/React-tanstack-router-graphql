@@ -1,12 +1,12 @@
 import { create } from 'zustand';
-import type { Price } from '../graphql/types';
+import type { Price } from '../graphql/queryTypes';
 
 export type AttributeSelection = {
   attributeId: string;
   attributeValueId: string;
 };
 
-type CartItem = {
+export type CartItem = {
   productId: string;
   productContent: string;
   name: string;
@@ -47,14 +47,25 @@ export const useCartStore = create<CartStore>((set, get) => ({
   },
 
   removeFromCart: (item) => {
-    set({
-      cart: get().cart.filter(
-        (cartItem) =>
-          !(
-            cartItem.productId === item.productId &&
-            isSameAttributes(cartItem.attributes, item.attributes)
-          )
-      ),
-    });
+    const cart = get().cart;
+    const newCart = cart
+      .map((cartItem) => {
+        if (
+          cartItem.productId === item.productId &&
+          isSameAttributes(cartItem.attributes, item.attributes)
+        ) {
+          if (cartItem.quantity > 1) {
+            return {
+              ...cartItem,
+              quantity: cartItem.quantity - 1,
+            };
+          }
+          return null;
+        }
+        return cartItem;
+      })
+      .filter((cartItem) => cartItem !== null);
+
+    set({ cart: newCart });
   },
 }));

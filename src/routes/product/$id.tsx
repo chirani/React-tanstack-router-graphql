@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import { useProductData } from '../../queries/categories';
-import type { Attribute, AttributeItem } from '../../graphql/types';
+import { useProductData } from '../../queries/products';
+import type { Attribute, AttributeItem } from '../../graphql/queryTypes';
 import { getPreviewText } from '../../utils/strings';
 import { useCartStore } from '../../zustand/cart';
 

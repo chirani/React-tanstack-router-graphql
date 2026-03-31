@@ -4,12 +4,12 @@ import {
   type Category,
   type Product,
   type ProductDataResponse,
-} from '../graphql/types';
+} from '../graphql/queryTypes';
 import {
   GET_CATEGORIES,
   GET_PRODUCT_DATA,
   GET_STORE_DATA,
-} from '../graphql/graph';
+} from '../graphql/queryGraph';
 
 const endpoint = 'http://localhost:8080/api/graphql';
 
