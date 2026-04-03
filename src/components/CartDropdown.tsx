@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useCartStore } from '../zustand/cart';
+import { useCartStore, type CartItem } from '../zustand/cart';
 import { ShoppingBag, Trash2 as Trash } from 'lucide-react';
 import { toKebabCase } from '../utils/strings';
 import { Link } from '@tanstack/react-router';
@@ -7,7 +7,7 @@ import { Link } from '@tanstack/react-router';
 const CartDropdown = () => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const { cart, removeFromCart } = useCartStore();
+  const { cart } = useCartStore();
 
   const total = cart.reduce(
     (sum, item) => sum + item.price.amount * item.quantity,
@@ -46,43 +46,7 @@ const CartDropdown = () => {
 
           <div className="flex flex-col gap-3 max-h-60 overflow-y-auto">
             {cart.map((item, index) => (
-              <div
-                key={index}
-                data-testid={`cart-item-attribute-${toKebabCase(item.name)}`}
-              >
-                <div className="flex flex-row gap-3">
-                  <figure className="size-18 bg-red-200">
-                    <img src={item.productContent} className="w-full h-full" />
-                  </figure>
-                  <div className="flex flex-col flex-1">
-                    <p className="font-semibold">{item.name}</p>
-                    <div className="text-sm text-zinc-700 flex flex-col flex-wrap mb-2">
-                      {item.attributes.map((attr) => (
-                        <p
-                          key={attr.attributeId}
-                          className="font-medium text-xs"
-                          data-testid={`cart-item-attribute-${toKebabCase(item.name)}-${toKebabCase(attr.attributeId)}`}
-                        >
-                          {attr.attributeId}{' '}
-                          <span className="text-teal-700">
-                            {attr.attributeValueId}
-                          </span>
-                        </p>
-                      ))}
-                    </div>
-                    <p>${item.price.amount}</p>
-
-                    <div className="py-2 flex flex-row justify-between">
-                      <p>Qty: {item.quantity}</p>
-                      <Trash
-                        onClick={() => {
-                          removeFromCart(item);
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <CartItem key={index} {...item} />
             ))}
           </div>
 
@@ -97,13 +61,53 @@ const CartDropdown = () => {
             <Link
               disabled={!Boolean(total)}
               to="/checkout"
-              className="bg-black text-center text-white px-3 py-2 w-full"
+              className="bg-black text-center text-white px-3 py-2 w-full active:bg-teal-700"
             >
               Checkout
             </Link>
           </div>
         </div>
       )}
+    </div>
+  );
+};
+
+interface CartItemProps extends CartItem {}
+
+const CartItem: React.FC<CartItemProps> = (props) => {
+  const { removeFromCart } = useCartStore();
+  return (
+    <div data-testid={`cart-item-attribute-${toKebabCase(props.name)}`}>
+      <div className="flex flex-row gap-3">
+        <figure className="size-18 bg-red-200">
+          <img src={props.productContent} className="w-full h-full" />
+        </figure>
+        <div className="flex flex-col flex-1">
+          <p className="font-semibold">{props.name}</p>
+          <div className="text-sm text-zinc-700 flex flex-col flex-wrap mb-2">
+            {props.attributes.map((attr) => (
+              <p
+                key={attr.attributeId}
+                className="font-medium text-xs"
+                data-testid={`cart-item-attribute-${toKebabCase(props.name)}-${toKebabCase(attr.attributeId)}`}
+              >
+                {attr.attributeId}{' '}
+                <span className="text-teal-700">{attr.attributeValueId}</span>
+              </p>
+            ))}
+          </div>
+          <p>${props.price.amount}</p>
+
+          <div className="py-2 flex flex-row justify-between">
+            <p>Qty: {props.quantity}</p>
+            <Trash
+              onClick={() => {
+                removeFromCart(props);
+              }}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
