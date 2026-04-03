@@ -20,6 +20,7 @@ type CartStore = {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
   removeFromCart: (item: CartItem) => void;
+  updateCartItem: (item: CartItem, newAttribute: AttributeSelection) => void;
 };
 
 const isSameAttributes = (a: AttributeSelection[], b: AttributeSelection[]) => {
@@ -69,6 +70,33 @@ export const useCartStore = create<CartStore>()(
             return cartItem;
           })
           .filter((cartItem) => cartItem !== null);
+
+        set({ cart: newCart });
+      },
+
+      updateCartItem: (item, newAttribute) => {
+        const cart = get().cart;
+
+        const newCart = cart.map((cartItem) => {
+          if (
+            cartItem.productId === item.productId &&
+            isSameAttributes(cartItem.attributes, item.attributes)
+          ) {
+            const newAttributes = cartItem.attributes.map((attr) => {
+              if (attr.attributeId === newAttribute.attributeId) {
+                return newAttribute;
+              } else {
+                return attr;
+              }
+            });
+            return {
+              ...cartItem,
+              attributes: newAttributes,
+            };
+          } else {
+            return cartItem;
+          }
+        });
 
         set({ cart: newCart });
       },

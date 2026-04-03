@@ -8,7 +8,7 @@ interface OrderItemProps extends CartItemType {}
 
 const OrderItem: React.FC<OrderItemProps> = (props) => {
   const { productId } = props;
-  const { addToCart, removeFromCart } = useCartStore();
+  const { addToCart, removeFromCart, updateCartItem } = useCartStore();
   const [selectedAttributes, setSelectedAttributes] = useState<
     Record<string, string>
   >({});
@@ -17,11 +17,12 @@ const OrderItem: React.FC<OrderItemProps> = (props) => {
   const products = isSuccess ? data.product : [];
   useEffect(() => {
     if (data?.product.length) {
-      let attrs = data.product[0]?.attributes;
-      attrs.map((attr) => {
+      let cartAttrs = props.attributes;
+
+      cartAttrs.map((attr) => {
         setSelectedAttributes((prev) => ({
           ...prev,
-          [attr.id]: attr.items[0].id,
+          [attr.attributeId]: attr.attributeValueId,
         }));
       });
     }
@@ -32,6 +33,10 @@ const OrderItem: React.FC<OrderItemProps> = (props) => {
       ...prev,
       [attrId]: itemId,
     }));
+    updateCartItem(props, {
+      attributeId: attrId,
+      attributeValueId: itemId,
+    });
   };
 
   if (isLoading) {
