@@ -1,8 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useCreateOrder } from '../queries/orders';
 import { useCartStore } from '../zustand/cart';
 import OrderItem from '../components/OrderItem';
-import { ShoppingBag } from 'lucide-react';
+import { Edit2Icon, ShoppingBag } from 'lucide-react';
+import { useShippingStore } from '../zustand/shippingAddress';
 
 export const Route = createFileRoute('/checkout')({
   component: RouteComponent,
@@ -14,6 +15,7 @@ function RouteComponent() {
 
   return (
     <main className="max-w-6xl mx-auto my-12">
+      <ShippingData />
       {!Boolean(cart.length) && (
         <div className="flex flex-col items-center gap-6">
           <p className="font-medium text-2xl text-center">
@@ -28,3 +30,44 @@ function RouteComponent() {
     </main>
   );
 }
+
+const ShippingData = () => {
+  const navigate = useNavigate();
+  const { shipping } = useShippingStore();
+
+  const isEmpty = Object.values(shipping).some((v) => v === '');
+
+  if (isEmpty) {
+    return (
+      <div className="flex flex-row gap-3 p-3 justify-center">
+        <button className="bg-teal-800 text-white font-medium p-3 px-6 rounded-md hover:opacity-60 cursor-pointer animate-pulse">
+          Add Shipping Data
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-row gap-3 p-4 justify-between items-center shadow">
+      <div className="flex flex-col gap-3">
+        <p className="text-sm text-zinc-500">
+          Name <span className="text-zinc-900">{shipping.name}</span>
+        </p>
+        <p className="text-sm text-zinc-500">
+          Email <span className="text-zinc-900">{shipping.email}</span>
+        </p>
+        <p className="text-sm text-zinc-500">
+          Address <span className="text-zinc-900">{shipping.address}</span>
+        </p>
+      </div>
+      <button
+        onClick={() => {
+          navigate({ to: '/shipping-info' });
+        }}
+        className="p-4 bg-zinc-100 rounded-full hover:bg-teal-200"
+      >
+        <Edit2Icon />
+      </button>
+    </div>
+  );
+};

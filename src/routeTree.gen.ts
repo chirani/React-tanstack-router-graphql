@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ShippingInfoRouteImport } from './routes/shipping-info'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductIdRouteImport } from './routes/product/$id'
 
+const ShippingInfoRoute = ShippingInfoRouteImport.update({
+  id: '/shipping-info',
+  path: '/shipping-info',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
@@ -32,35 +38,46 @@ const ProductIdRoute = ProductIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
+  '/shipping-info': typeof ShippingInfoRoute
   '/product/$id': typeof ProductIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
+  '/shipping-info': typeof ShippingInfoRoute
   '/product/$id': typeof ProductIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
+  '/shipping-info': typeof ShippingInfoRoute
   '/product/$id': typeof ProductIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/checkout' | '/product/$id'
+  fullPaths: '/' | '/checkout' | '/shipping-info' | '/product/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/checkout' | '/product/$id'
-  id: '__root__' | '/' | '/checkout' | '/product/$id'
+  to: '/' | '/checkout' | '/shipping-info' | '/product/$id'
+  id: '__root__' | '/' | '/checkout' | '/shipping-info' | '/product/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CheckoutRoute: typeof CheckoutRoute
+  ShippingInfoRoute: typeof ShippingInfoRoute
   ProductIdRoute: typeof ProductIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/shipping-info': {
+      id: '/shipping-info'
+      path: '/shipping-info'
+      fullPath: '/shipping-info'
+      preLoaderRoute: typeof ShippingInfoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout': {
       id: '/checkout'
       path: '/checkout'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CheckoutRoute: CheckoutRoute,
+  ShippingInfoRoute: ShippingInfoRoute,
   ProductIdRoute: ProductIdRoute,
 }
 export const routeTree = rootRouteImport

@@ -11,7 +11,7 @@ export interface Attribute {
   __typename: string;
 }
 
-interface Currency {
+export interface Currency {
   symbol: string;
   label: string;
   __typename: string;
