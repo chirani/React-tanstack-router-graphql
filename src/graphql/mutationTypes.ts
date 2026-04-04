@@ -7,6 +7,7 @@ export type CreateOrder = {
   items: {
     productId: string;
     quantity: number;
+    price_amount: number;
     attributes: {
       attributeId: string;
       attributeValueId: string;

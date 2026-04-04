@@ -1,8 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
 import { useCartStore, type CartItem } from '../zustand/cart';
-import { ShoppingBag, Trash2 as Trash } from 'lucide-react';
+import {
+  MinusSquareIcon,
+  PlusSquareIcon,
+  ShoppingBag,
+  TrashIcon,
+} from 'lucide-react';
 import { toKebabCase } from '../utils/strings';
 import { Link } from '@tanstack/react-router';
+import { useProductData } from '../queries/products';
+import type { Attribute, AttributeItem } from '../graphql/queryTypes';
 
 const CartDropdown = () => {
   const [open, setOpen] = useState(false);
@@ -75,36 +82,105 @@ const CartDropdown = () => {
 interface CartItemProps extends CartItem {}
 
 const CartItem: React.FC<CartItemProps> = (props) => {
-  const { removeFromCart } = useCartStore();
+  const { productId } = props;
+  const { addToCart, removeFromCart, updateCartItem, cart } = useCartStore();
+  const [selectedAttributes, setSelectedAttributes] = useState<
+    Record<string, string>
+  >({});
+
+  const { data, isLoading, isSuccess } = useProductData(productId);
+  const products = isSuccess ? data.product : [];
+  useEffect(() => {
+    if (data?.product.length) {
+      let cartAttrs = props.attributes;
+
+      cartAttrs.map((attr) => {
+        setSelectedAttributes((prev) => ({
+          ...prev,
+          [attr.attributeId]: attr.attributeValueId,
+        }));
+      });
+    }
+  }, [data, cart]);
+
+  const handleSelect = (attrId: string, itemId: string) => {
+    setSelectedAttributes((prev) => ({
+      ...prev,
+      [attrId]: itemId,
+    }));
+    updateCartItem(props, {
+      attributeId: attrId,
+      attributeValueId: itemId,
+    });
+  };
+
+  if (isLoading) {
+    return <div className="p-6">Loading...</div>;
+  }
+
+  if (!products.length) {
+    return <div className="my-12 text-center">404 Product not found</div>;
+  }
+
+  if (!isSuccess) {
+    return <div className="p-6">Product not found</div>;
+  }
+
+  const product = products[0];
+
   return (
     <div data-testid={`cart-item-attribute-${toKebabCase(props.name)}`}>
       <div className="flex flex-row gap-3">
-        <figure className="size-18 bg-red-200">
-          <img src={props.productContent} className="w-full h-full" />
+        <figure className="size-18 min-w-18 bg-red-200">
+          <img
+            src={props.productContent}
+            className="w-full h-full object-cover"
+          />
         </figure>
         <div className="flex flex-col flex-1">
           <p className="font-semibold">{props.name}</p>
           <div className="text-sm text-zinc-700 flex flex-col flex-wrap mb-2">
-            {props.attributes.map((attr) => (
-              <p
-                key={attr.attributeId}
-                className="font-medium text-xs"
-                data-testid={`cart-item-attribute-${toKebabCase(props.name)}-${toKebabCase(attr.attributeId)}`}
-              >
-                {attr.attributeId}{' '}
-                <span className="text-teal-700">{attr.attributeValueId}</span>
-              </p>
+            {product.attributes?.map((attr: Attribute) => (
+              <div key={attr.id}>
+                <p className="text-xs font-medium">{attr.id}</p>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {attr.items.map((item: AttributeItem) => (
+                    <button
+                      key={item.id}
+                      onClick={() => handleSelect(attr.id, item.id)}
+                      className={`text-xs px-1.5 py-1 border font-medium rounded ${
+                        selectedAttributes[attr.id] === item.id
+                          ? 'bg-black text-white'
+                          : ''
+                      }`}
+                    >
+                      {item.displayValue}
+                    </button>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
-          <p>${props.price.amount}</p>
+          <p className="font-bold text-teal-900">${props.price.amount}</p>
 
           <div className="py-2 flex flex-row justify-between">
-            <p>Qty: {props.quantity}</p>
-            <Trash
-              onClick={() => {
-                removeFromCart(props);
-              }}
-            />
+            <div className="flex flex-row items-center">
+              <PlusSquareIcon onMouseDown={() => addToCart(props)} />
+              <p className="p-2">{props.quantity}</p>
+              {props.quantity > 1 ? (
+                <MinusSquareIcon
+                  onMouseDown={() => {
+                    removeFromCart(props);
+                  }}
+                />
+              ) : (
+                <TrashIcon
+                  onMouseDown={() => {
+                    removeFromCart(props);
+                  }}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

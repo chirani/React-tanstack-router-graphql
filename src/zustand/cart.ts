@@ -21,6 +21,7 @@ type CartStore = {
   addToCart: (item: CartItem) => void;
   removeFromCart: (item: CartItem) => void;
   updateCartItem: (item: CartItem, newAttribute: AttributeSelection) => void;
+  clearCart: () => void;
 };
 
 const isSameAttributes = (a: AttributeSelection[], b: AttributeSelection[]) => {
@@ -99,6 +100,10 @@ export const useCartStore = create<CartStore>()(
         });
 
         set({ cart: newCart });
+      },
+
+      clearCart: () => {
+        set({ cart: [] });
       },
     }),
     {

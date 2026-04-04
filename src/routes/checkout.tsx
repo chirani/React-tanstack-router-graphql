@@ -10,11 +10,11 @@ export const Route = createFileRoute('/checkout')({
 });
 
 function RouteComponent() {
-  const { mutate: checkout } = useCreateOrder();
-  const { cart } = useCartStore();
+  const { mutateAsync: checkout } = useCreateOrder();
+  const { cart, clearCart } = useCartStore();
 
   return (
-    <main className="max-w-6xl mx-auto my-12">
+    <main className="max-w-6xl flex flex-col mx-auto my-12 gap-3">
       <ShippingData />
       {!Boolean(cart.length) && (
         <div className="flex flex-col items-center gap-6">
@@ -27,6 +27,21 @@ function RouteComponent() {
       {cart.map((cartItem, index) => {
         return <OrderItem key={index} {...cartItem} />;
       })}
+      <div className="flex flex-row-reverse gap-3">
+        <button
+          className="btn"
+          onClick={async () => {
+            await checkout().then(() => {
+              clearCart();
+            });
+          }}
+        >
+          Checkout
+        </button>
+        <button className="btn" onClick={clearCart}>
+          Clear Cart
+        </button>
+      </div>
     </main>
   );
 }
@@ -66,7 +81,7 @@ const ShippingData = () => {
         }}
         className="p-4 bg-zinc-100 rounded-full hover:bg-teal-200"
       >
-        <Edit2Icon />
+        <Edit2Icon className="size-5" />
       </button>
     </div>
   );
