@@ -32,6 +32,11 @@ const CartDropdown = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const numberOfItems: number = cart.reduce(
+    (acc, curr) => acc + curr.quantity,
+    0
+  );
+
   return (
     <div className="relative" ref={ref}>
       <button
@@ -56,7 +61,7 @@ const CartDropdown = () => {
               <CartItem key={index} {...item} />
             ))}
           </div>
-
+          <div>{`${numberOfItems} ${numberOfItems === 1 ? ' Item' : ' Items'}`}</div>
           <div className="mt-4 border-t pt-2 flex justify-between">
             <span>Total:</span>
             <span className="font-bold" data-testid={'cart-item-amount'}>
@@ -131,7 +136,7 @@ const CartItem: React.FC<CartItemProps> = (props) => {
   return (
     <div data-testid={`cart-item-attribute-${toKebabCase(props.name)}`}>
       <div className="flex flex-row gap-3">
-        <figure className="size-18 min-w-18 bg-red-200">
+        <figure className="size-18 min-w-18">
           <img
             src={props.productContent}
             className="w-full h-full object-cover"
@@ -167,19 +172,13 @@ const CartItem: React.FC<CartItemProps> = (props) => {
             <div className="flex flex-row items-center">
               <PlusSquareIcon onMouseDown={() => addToCart(props)} />
               <p className="p-2">{props.quantity}</p>
-              {props.quantity > 1 ? (
-                <MinusSquareIcon
-                  onMouseDown={() => {
-                    removeFromCart(props);
-                  }}
-                />
-              ) : (
-                <TrashIcon
-                  onMouseDown={() => {
-                    removeFromCart(props);
-                  }}
-                />
-              )}
+              <button
+                onMouseDown={() => {
+                  removeFromCart(props);
+                }}
+              >
+                {props.quantity > 1 ? <MinusSquareIcon /> : <TrashIcon />}
+              </button>
             </div>
           </div>
         </div>
