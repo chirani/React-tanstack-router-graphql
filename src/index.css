@@ -1,11 +1,11 @@
 @import 'tailwindcss';
 
 .input {
-  @apply py-2 px-4 border border-zinc-200 outline-teal-300;
+  @apply py-3 px-6 border border-zinc-200 outline-teal-300;
 }
 
 .btn {
-  @apply py-2 px-4 bg-zinc-900 text-white font-medium hover:opacity-60 cursor-pointer active:bg-teal-900;
+  @apply py-3 px-6 bg-zinc-900 text-white font-medium hover:opacity-60 cursor-pointer active:bg-teal-900;
 }
 
 .error {
