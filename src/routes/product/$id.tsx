@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { useProductData } from '../../queries/products';
 import type { Attribute, AttributeItem } from '../../graphql/queryTypes';
-import { getPreviewText } from '../../utils/strings';
+import { getPreviewText, toKebabCase } from '../../utils/strings';
 import { useCartStore } from '../../zustand/cart';
 
 export const Route = createFileRoute('/product/$id')({
@@ -81,18 +81,23 @@ function RouteComponent() {
           <img
             src={selectedImage || product.gallery[0]}
             alt={product.name}
-            className="w-full h-full object-cover"
+            className="max-h-full mx-auto object-cover"
           />
         </figure>
 
-        <div className="flex gap-2 mt-3">
+        <div
+          data-testid="product-gallery"
+          className="flex gap-2 flex-wrap mt-3"
+        >
           {product.gallery.map((img: string) => (
-            <img
-              key={img}
-              src={img}
-              onClick={() => setSelectedImage(img)}
-              className="w-20 h-20 object-cover cursor-pointer hover:opacity-70"
-            />
+            <figure className="h-20 w-20">
+              <img
+                key={img}
+                src={img}
+                onClick={() => setSelectedImage(img)}
+                className="max-h-20 object-cover cursor-pointer hover:opacity-70"
+              />
+            </figure>
           ))}
         </div>
       </div>
@@ -103,7 +108,10 @@ function RouteComponent() {
         <p className="text-xl font-bold">${product.prices[0].amount}</p>
 
         {product.attributes?.map((attr: Attribute) => (
-          <div key={attr.id}>
+          <div
+            key={attr.id}
+            data-testid={`product-attribute-${toKebabCase(attr.id)}`}
+          >
             <p className="font-medium mb-2">{attr.id}</p>
             <div className="flex gap-2">
               {attr.items.map((item: AttributeItem) => (
@@ -123,6 +131,7 @@ function RouteComponent() {
           </div>
         ))}
         <p
+          data-testid="product-description"
           dangerouslySetInnerHTML={{
             __html: isFullDescription
               ? product.description
@@ -137,6 +146,7 @@ function RouteComponent() {
           {isFullDescription ? 'Show Less' : 'Show More'}
         </button>
         <button
+          data-testid="add-to-cart"
           disabled={!product.inStock}
           onMouseDown={() => onAddToCart()}
           className="mt-4 bg-black disabled:bg-zinc-300 cursor-pointer text-white py-3 rounded hover:opacity-80"
