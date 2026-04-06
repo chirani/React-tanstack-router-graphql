@@ -61,15 +61,6 @@ const OrderItem: React.FC<OrderItemProps> = (props) => {
       </figure>
       <div className="flex flex-col py-3">
         <h2 className="font-medium text-lg mb-2">{props.name}</h2>
-        <div className="flex flex-row items-center">
-          <PlusSquareIcon onMouseDown={() => addToCart(props)} />
-          <p className="p-2">{props.quantity}</p>
-          {props.quantity > 1 ? (
-            <MinusSquareIcon onMouseDown={() => removeFromCart(props)} />
-          ) : (
-            <TrashIcon onMouseDown={() => removeFromCart(props)} />
-          )}
-        </div>
 
         {product.attributes?.map((attr: Attribute) => (
           <div
@@ -78,7 +69,7 @@ const OrderItem: React.FC<OrderItemProps> = (props) => {
           >
             <p className="font-medium mb-2">{attr.id}</p>
             {attr.id === 'Color' ? (
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {attr.items.map((item: AttributeItem) => (
                   <button
                     key={item.id}
@@ -97,7 +88,7 @@ const OrderItem: React.FC<OrderItemProps> = (props) => {
                 ))}
               </div>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 {attr.items.map((item: AttributeItem) => (
                   <button
                     key={item.id}
@@ -115,6 +106,15 @@ const OrderItem: React.FC<OrderItemProps> = (props) => {
             )}
           </div>
         ))}
+        <div className="flex flex-row items-center mt-3">
+          <PlusSquareIcon onMouseDown={() => addToCart(props)} />
+          <p className="p-2">{props.quantity}</p>
+          {props.quantity > 1 ? (
+            <MinusSquareIcon onMouseDown={() => removeFromCart(props)} />
+          ) : (
+            <TrashIcon onMouseDown={() => removeFromCart(props)} />
+          )}
+        </div>
       </div>
     </div>
   );
