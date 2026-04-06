@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useCreateOrder } from '../queries/orders';
 import { useCartStore } from '../zustand/cart';
 import OrderItem from '../components/OrderItem';
-import { Edit2Icon, ShoppingBag } from 'lucide-react';
+import { Edit2Icon, LoaderCircleIcon, ShoppingBag } from 'lucide-react';
 import { useShippingStore } from '../zustand/shippingAddress';
 
 export const Route = createFileRoute('/checkout')({
@@ -10,8 +10,12 @@ export const Route = createFileRoute('/checkout')({
 });
 
 function RouteComponent() {
-  const { mutateAsync: checkout } = useCreateOrder();
+  const { mutateAsync: checkout, isPending } = useCreateOrder();
   const { cart, clearCart } = useCartStore();
+
+  if (isPending) {
+    return <LoaderCircleIcon className="mx-auto my-16 animate-spin" />;
+  }
 
   return (
     <main className="max-w-6xl flex flex-col mx-auto my-12 gap-3">
@@ -21,7 +25,7 @@ function RouteComponent() {
           <p className="font-medium text-2xl text-center">
             There No Items In Your Carts Yet
           </p>
-          <ShoppingBag size={48} />
+          <ShoppingBag size={48} className="animate-pulse" />
         </div>
       )}
       {cart.map((cartItem, index) => {
@@ -36,7 +40,7 @@ function RouteComponent() {
             });
           }}
         >
-          Checkout
+          Place Order
         </button>
         <button className="btn" onClick={clearCart}>
           Clear Cart

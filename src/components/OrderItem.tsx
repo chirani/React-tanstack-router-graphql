@@ -3,6 +3,7 @@ import { useProductData } from '../queries/products';
 import { useCartStore, type CartItem as CartItemType } from '../zustand/cart';
 import type { Attribute, AttributeItem } from '../graphql/queryTypes';
 import { MinusSquareIcon, PlusSquareIcon, TrashIcon } from 'lucide-react';
+import { toKebabCase } from '../utils/strings';
 
 interface OrderItemProps extends CartItemType {}
 
@@ -69,24 +70,49 @@ const OrderItem: React.FC<OrderItemProps> = (props) => {
             <TrashIcon onMouseDown={() => removeFromCart(props)} />
           )}
         </div>
+
         {product.attributes?.map((attr: Attribute) => (
-          <div key={attr.id}>
-            <p className="text-xs font-medium">{attr.id}</p>
-            <div className="flex gap-2 mb-2">
-              {attr.items.map((item: AttributeItem) => (
-                <button
-                  key={item.id}
-                  onClick={() => handleSelect(attr.id, item.id)}
-                  className={`text-xs px-1.5 py-1 border font-medium rounded ${
-                    selectedAttributes[attr.id] === item.id
-                      ? 'bg-black text-white'
-                      : ''
-                  }`}
-                >
-                  {item.displayValue}
-                </button>
-              ))}
-            </div>
+          <div
+            key={attr.id}
+            data-testid={`product-attribute-${toKebabCase(attr.id)}`}
+          >
+            <p className="font-medium mb-2">{attr.id}</p>
+            {attr.id === 'Color' ? (
+              <div className="flex gap-2">
+                {attr.items.map((item: AttributeItem) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleSelect(attr.id, item.id)}
+                    className={`border-3 p-1 ${
+                      selectedAttributes[attr.id] === item.id
+                        ? 'border-zinc-900'
+                        : 'border-transparent'
+                    }`}
+                  >
+                    <div
+                      className="size-6"
+                      style={{ backgroundColor: item.value }}
+                    ></div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                {attr.items.map((item: AttributeItem) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleSelect(attr.id, item.id)}
+                    className={`px-3 py-1 border rounded ${
+                      selectedAttributes[attr.id] === item.id
+                        ? 'bg-black text-white'
+                        : ''
+                    }`}
+                  >
+                    {item.displayValue}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>

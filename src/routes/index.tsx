@@ -37,7 +37,7 @@ function Index() {
           <ProductCard
             key={product.id}
             {...product}
-            price={product.prices[0].amount}
+            price={product.prices[0]}
           />
         );
       })}

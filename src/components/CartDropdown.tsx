@@ -95,6 +95,7 @@ const CartItem: React.FC<CartItemProps> = (props) => {
 
   const { data, isLoading, isSuccess } = useProductData(productId);
   const products = isSuccess ? data.product : [];
+
   useEffect(() => {
     if (data?.product.length) {
       let cartAttrs = props.attributes;
@@ -146,23 +147,47 @@ const CartItem: React.FC<CartItemProps> = (props) => {
           <p className="font-semibold">{props.name}</p>
           <div className="text-sm text-zinc-700 flex flex-col flex-wrap mb-2">
             {product.attributes?.map((attr: Attribute) => (
-              <div key={attr.id}>
-                <p className="text-xs font-medium">{attr.id}</p>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {attr.items.map((item: AttributeItem) => (
-                    <button
-                      key={item.id}
-                      onClick={() => handleSelect(attr.id, item.id)}
-                      className={`text-xs px-1.5 py-1 border font-medium rounded ${
-                        selectedAttributes[attr.id] === item.id
-                          ? 'bg-black text-white'
-                          : ''
-                      }`}
-                    >
-                      {item.displayValue}
-                    </button>
-                  ))}
-                </div>
+              <div
+                key={attr.id}
+                data-testid={`product-attribute-${toKebabCase(attr.id)}`}
+              >
+                <p className="font-medium mb-2">{attr.id}</p>
+                {attr.id === 'Color' ? (
+                  <div className="flex flex-wrap gap-2">
+                    {attr.items.map((item: AttributeItem) => (
+                      <button
+                        key={item.id}
+                        onClick={() => handleSelect(attr.id, item.id)}
+                        className={`border-3 p-1 ${
+                          selectedAttributes[attr.id] === item.id
+                            ? 'border-zinc-900'
+                            : 'border-zinc-200'
+                        }`}
+                      >
+                        <div
+                          className="size-6"
+                          style={{ backgroundColor: item.value }}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {attr.items.map((item: AttributeItem) => (
+                      <button
+                        key={item.id}
+                        onClick={() => handleSelect(attr.id, item.id)}
+                        className={`px-3 py-1 border rounded ${
+                          selectedAttributes[attr.id] === item.id
+                            ? 'bg-black text-white'
+                            : ''
+                        }`}
+                      >
+                        {item.displayValue}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>

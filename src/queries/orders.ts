@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { CREATE_ORDER_MUTATION } from '../graphql/mutationGraph';
 import { useCartStore } from '../zustand/cart';
 import { useShippingStore } from '../zustand/shippingAddress';
+import useToastStore from '../zustand/toast';
 
 const endpoint = 'http://localhost:8080/api/graphql';
 
@@ -21,6 +22,7 @@ export async function createOrder(order: CreateOrder) {
 export const useCreateOrder = () => {
   const { cart } = useCartStore();
   const { shipping } = useShippingStore();
+  const { addToast } = useToastStore();
 
   return useMutation({
     mutationKey: ['create-order'],
@@ -41,7 +43,10 @@ export const useCreateOrder = () => {
         items,
       };
 
-      return await createOrder(order);
+      const newOrder = await createOrder(order);
+      addToast('Products Ordered!');
+
+      return newOrder;
     },
   });
 };

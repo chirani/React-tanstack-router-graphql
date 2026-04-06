@@ -4,6 +4,7 @@ import { useProductData } from '../../queries/products';
 import type { Attribute, AttributeItem } from '../../graphql/queryTypes';
 import { getPreviewText, toKebabCase } from '../../utils/strings';
 import { useCartStore } from '../../zustand/cart';
+import useToastStore from '../../zustand/toast';
 
 export const Route = createFileRoute('/product/$id')({
   component: RouteComponent,
@@ -11,13 +12,14 @@ export const Route = createFileRoute('/product/$id')({
 
 function RouteComponent() {
   const params = Route.useParams();
-  const { data, isSuccess, isLoading } = useProductData(params.id);
   const { addToCart } = useCartStore();
-  const [selectedImage, setSelectedImage] = useState('');
+  const { addToast } = useToastStore();
+  const [selectedImage, setSelectedImage] = useState<string>('');
   const [isFullDescription, toggleFullDescription] = useState(false);
   const [selectedAttributes, setSelectedAttributes] = useState<
     Record<string, string>
   >({});
+  const { data, isSuccess, isLoading } = useProductData(params.id);
 
   useEffect(() => {
     if (data?.product.length) {
@@ -55,13 +57,13 @@ function RouteComponent() {
   const product = products[0];
 
   const onAddToCart = () => {
-    console.log(selectedAttributes);
-
     const attrs = Object.entries(selectedAttributes).map(
-      ([attributeId, attributeValueId]) => ({
-        attributeId,
-        attributeValueId,
-      })
+      ([attributeId, attributeValueId]) => {
+        return {
+          attributeId,
+          attributeValueId,
+        };
+      }
     );
 
     addToCart({
@@ -72,6 +74,8 @@ function RouteComponent() {
       quantity: 1,
       productContent: product.gallery.length ? product.gallery[0] : '',
     });
+
+    addToast('Product added to cart', 'info');
   };
 
   return (
@@ -113,21 +117,42 @@ function RouteComponent() {
             data-testid={`product-attribute-${toKebabCase(attr.id)}`}
           >
             <p className="font-medium mb-2">{attr.id}</p>
-            <div className="flex gap-2">
-              {attr.items.map((item: AttributeItem) => (
-                <button
-                  key={item.id}
-                  onClick={() => handleSelect(attr.id, item.id)}
-                  className={`px-3 py-1 border rounded ${
-                    selectedAttributes[attr.id] === item.id
-                      ? 'bg-black text-white'
-                      : ''
-                  }`}
-                >
-                  {item.displayValue}
-                </button>
-              ))}
-            </div>
+            {attr.id === 'Color' ? (
+              <div className="flex gap-2">
+                {attr.items.map((item: AttributeItem) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleSelect(attr.id, item.id)}
+                    className={`p-0.5 border-3 ${
+                      selectedAttributes[attr.id] === item.id
+                        ? 'border-zinc-900'
+                        : 'border-zinc-200'
+                    }`}
+                  >
+                    <div
+                      className="size-6"
+                      style={{ backgroundColor: item.value }}
+                    ></div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                {attr.items.map((item: AttributeItem) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleSelect(attr.id, item.id)}
+                    className={`px-3 py-1 border rounded ${
+                      selectedAttributes[attr.id] === item.id
+                        ? 'bg-black text-white'
+                        : ''
+                    }`}
+                  >
+                    {item.displayValue}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         ))}
         <p
