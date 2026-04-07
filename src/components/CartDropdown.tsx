@@ -146,14 +146,14 @@ const CartItem: React.FC<CartItemProps> = (props) => {
         <div className="flex flex-col flex-1">
           <p className="font-semibold">{props.name}</p>
           <div className="text-sm text-zinc-700 flex flex-col flex-wrap mb-2">
-            {product.attributes?.map((attr: Attribute) => (
+            {product.attributes.map((attr: Attribute) => (
               <div
                 key={attr.id}
                 data-testid={`product-attribute-${toKebabCase(attr.id)}`}
               >
                 <p className="font-medium mb-2">{attr.id}</p>
                 {attr.id === 'Color' ? (
-                  <div className="flex flex-wrap gap-2">
+                  <div key={attr.id} className="flex flex-wrap gap-2">
                     {attr.items.map((item: AttributeItem) => (
                       <button
                         key={item.id}
@@ -172,7 +172,7 @@ const CartItem: React.FC<CartItemProps> = (props) => {
                     ))}
                   </div>
                 ) : (
-                  <div className="flex flex-wrap gap-2">
+                  <div key={attr.id} className="flex flex-wrap gap-2">
                     {attr.items.map((item: AttributeItem) => (
                       <button
                         key={item.id}

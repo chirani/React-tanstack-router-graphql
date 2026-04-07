@@ -94,9 +94,8 @@ function RouteComponent() {
           className="flex gap-2 flex-wrap mt-3"
         >
           {product.gallery.map((img: string) => (
-            <figure className="h-20 w-20">
+            <figure key={img} className="h-20 w-20">
               <img
-                key={img}
                 src={img}
                 onClick={() => setSelectedImage(img)}
                 className="max-h-20 object-cover cursor-pointer hover:opacity-70"
@@ -121,7 +120,7 @@ function RouteComponent() {
               <div className="flex gap-2">
                 {attr.items.map((item: AttributeItem) => (
                   <button
-                    key={item.id}
+                    key={item.displayValue}
                     onClick={() => handleSelect(attr.id, item.id)}
                     className={`p-0.5 border-3 ${
                       selectedAttributes[attr.id] === item.id
@@ -140,7 +139,7 @@ function RouteComponent() {
               <div className="flex gap-2">
                 {attr.items.map((item: AttributeItem) => (
                   <button
-                    key={item.id}
+                    key={item.displayValue}
                     onClick={() => handleSelect(attr.id, item.id)}
                     className={`px-3 py-1 border rounded ${
                       selectedAttributes[attr.id] === item.id
