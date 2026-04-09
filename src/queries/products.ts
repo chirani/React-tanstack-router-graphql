@@ -10,8 +10,7 @@ import {
   GET_PRODUCT_DATA,
   GET_STORE_DATA,
 } from '../graphql/queryGraph';
-
-const endpoint = 'http://localhost:8080/api/graphql';
+import { endpoint } from '.';
 
 export function useStoreData(categoryName: string) {
   return useQuery<ProductDataResponse>({

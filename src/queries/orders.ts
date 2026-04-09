@@ -5,8 +5,7 @@ import { CREATE_ORDER_MUTATION } from '../graphql/mutationGraph';
 import { useCartStore } from '../zustand/cart';
 import { useShippingStore } from '../zustand/shippingAddress';
 import useToastStore from '../zustand/toast';
-
-const endpoint = 'http://localhost:8080/api/graphql';
+import { endpoint } from '.';
 
 export async function createOrder(order: CreateOrder) {
   try {
