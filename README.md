@@ -1,7 +1,3 @@
-Here is a cleaned-up and more professional version of your README with clearer structure, corrected wording, and better conventions:
-
----
-
 # React.js Frontend with GraphQL
 
 ## 📦 Installation
