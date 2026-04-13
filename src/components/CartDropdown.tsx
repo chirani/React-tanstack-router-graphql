@@ -51,7 +51,10 @@ const CartDropdown = () => {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-80 bg-white shadow-lg p-4 z-50">
+        <div
+          className="absolute right-0 mt-2 w-80 bg-white shadow-lg p-4 z-50"
+          data-testid="cart-overlay"
+        >
           <h3 className="font-bold mb-3">My Cart</h3>
 
           {cart.length === 0 && <p>Your cart is empty</p>}

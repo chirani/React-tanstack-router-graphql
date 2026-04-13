@@ -31,8 +31,8 @@ const Navbar = () => {
             {categories.map((category) => (
               <Link
                 key={category.id}
-                to="/"
-                search={{ category: category.id }}
+                to="/$category"
+                params={{ category: category.id }}
                 onClick={() => setOpen(false)}
                 className={`block p-3 ${
                   category.id === categoryId
@@ -54,9 +54,9 @@ const Navbar = () => {
           return (
             <Link
               key={category.id}
-              to="/"
+              to="/$category"
               className={`p-4 ${category.id === categoryId ? 'border-b-3 border-teal-600' : 'text-zinc-900'} hover:opacity-40`}
-              search={{ category: category.id }}
+              params={{ category: category.id }}
               {...testAttributes}
               {...testAttributes(category.id === categoryId)}
             >
