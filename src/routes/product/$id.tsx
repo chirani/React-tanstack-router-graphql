@@ -28,7 +28,7 @@ function RouteComponent() {
       attrs.map((attr) => {
         setSelectedAttributes((prev) => ({
           ...prev,
-          [attr.id]: attr.items[0].id,
+          [attr.id]: '',
         }));
       });
     }
@@ -62,6 +62,15 @@ function RouteComponent() {
     : getPreviewText(product.description, 20);
 
   const onAddToCart = () => {
+    const isAttributeValueEmpty = Object.values(selectedAttributes).some(
+      (sav) => sav === ''
+    );
+
+    if (isAttributeValueEmpty) {
+      addToast('You need to select all attributes', 'error');
+      return;
+    }
+
     const attrs = Object.entries(selectedAttributes).map(
       ([attributeId, attributeValueId]) => {
         return {
