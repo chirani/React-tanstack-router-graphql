@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
+import parse from 'html-react-parser';
 import { useProductData } from '../../queries/products';
 import type { Attribute, AttributeItem } from '../../graphql/queryTypes';
 import { getPreviewText, toKebabCase } from '../../utils/strings';
@@ -55,6 +56,10 @@ function RouteComponent() {
   }
 
   const product = products[0];
+
+  const rawContent = isFullDescription
+    ? product.description
+    : getPreviewText(product.description, 20);
 
   const onAddToCart = () => {
     const attrs = Object.entries(selectedAttributes).map(
@@ -155,14 +160,7 @@ function RouteComponent() {
             )}
           </div>
         ))}
-        <p
-          data-testid="product-description"
-          dangerouslySetInnerHTML={{
-            __html: isFullDescription
-              ? product.description
-              : getPreviewText(product.description, 20),
-          }}
-        ></p>
+        <p data-testid="product-description">{parse(rawContent)}</p>
         <button
           hidden={product.description.length < 199}
           onClick={() => toggleFullDescription((prev) => !prev)}
