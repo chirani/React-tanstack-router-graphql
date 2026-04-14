@@ -93,6 +93,10 @@ function RouteComponent() {
     addToast('Product added to cart', 'info');
   };
 
+  const isAttributeValueEmpty = Object.values(selectedAttributes).some(
+    (sav) => sav === ''
+  );
+
   return (
     <main className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10">
       <div>
@@ -183,24 +187,15 @@ function RouteComponent() {
         >
           {isFullDescription ? 'Show Less' : 'Show More'}
         </button>
-        {product.inStock ? (
-          <button
-            data-testid="add-to-cart"
-            onMouseDown={() => onAddToCart()}
-            className="mt-4 bg-black disabled:bg-zinc-300 cursor-pointer text-white py-3 rounded hover:opacity-80"
-          >
-            Add to Cart
-          </button>
-        ) : (
-          <button
-            data-testid="add-to-cart"
-            disabled
-            onMouseDown={() => onAddToCart()}
-            className="mt-4 bg-black disabled:bg-zinc-300 cursor-pointer text-white py-3 rounded hover:opacity-80"
-          >
-            Add to Cart
-          </button>
-        )}
+
+        <button
+          data-testid="add-to-cart"
+          disabled={!product.inStock || isAttributeValueEmpty}
+          onMouseDown={() => onAddToCart()}
+          className="mt-4 bg-black disabled:bg-zinc-300 cursor-pointer text-white py-3 rounded hover:opacity-80"
+        >
+          Add to Cart
+        </button>
       </div>
     </main>
   );
