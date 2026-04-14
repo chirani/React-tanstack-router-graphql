@@ -28,7 +28,9 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
     const attributeSelection: AttributeSelection[] = props.attributes.map(
       (attr) => ({
         attributeId: attr.id,
-        attributeValueId: attr.items[0].id,
+        attributeValueId:
+          attr.items.find((item) => item.position === 0)?.id ??
+          attr.items[0].id,
       })
     );
 
