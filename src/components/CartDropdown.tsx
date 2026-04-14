@@ -149,7 +149,7 @@ const CartItem: React.FC<CartItemProps> = (props) => {
                       <button
                         key={item.id}
                         onClick={() => handleSelect(attr.id, item.id)}
-                        data-testid={`product-attribute-${toKebabCase(attr.id)}-${toKebabCase(item.value)}`}
+                        data-testid={`product-attribute-color-${item.value}`}
                         className={`border-3 p-1 ${
                           selectedAttributes[attr.id] === item.id
                             ? 'border-zinc-900'
@@ -169,7 +169,7 @@ const CartItem: React.FC<CartItemProps> = (props) => {
                       <button
                         key={item.id}
                         onClick={() => handleSelect(attr.id, item.id)}
-                        data-testid={`prodcut-attribute-${attr.id}-${item.value}`}
+                        data-testid={`product-attribute-${attr.id}-${item.value}`}
                         className={`px-3 py-1 border rounded ${
                           selectedAttributes[attr.id] === item.id
                             ? 'bg-black text-white'
