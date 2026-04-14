@@ -127,10 +127,7 @@ const CartItem: React.FC<CartItemProps> = (props) => {
 
   return (
     <div data-testid={`cart-item-attribute-${toKebabCase(props.name)}`}>
-      <div
-        className="flex flex-row gap-3"
-        data-testid={`product-${toKebabCase(props.name)}`}
-      >
+      <div className="flex flex-row gap-3">
         <figure className="size-18 min-w-18">
           <img
             src={props.productContent}

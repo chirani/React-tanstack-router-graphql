@@ -7,6 +7,7 @@ import {
 } from '../zustand/cart';
 import type { Attribute, Price } from '../graphql/queryTypes';
 import useToastStore from '../zustand/toast';
+import { toKebabCase } from '../utils/strings';
 
 interface ProductCardProps {
   id: string;
@@ -44,7 +45,10 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
   };
 
   return (
-    <div className="p-3 shadow-sm rounded-lg flex flex-col gap-2 bg-white">
+    <div
+      className="p-3 shadow-sm rounded-lg flex flex-col gap-2 bg-white"
+      data-testid={`product-${toKebabCase(props.name)}`}
+    >
       <figure className="group flex items-center justify-center aspect-square w-full overflow-hidden rounded-md relative">
         <img
           onMouseDown={() => {
