@@ -29,6 +29,7 @@ export const GET_STORE_DATA = gql`
           id
           value
           displayValue
+          position
           __typename
         }
         __typename
@@ -65,6 +66,7 @@ export const GET_PRODUCT_DATA = gql`
           id
           value
           displayValue
+          position
           __typename
         }
         __typename

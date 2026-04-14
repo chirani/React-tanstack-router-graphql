@@ -1,5 +1,6 @@
 export interface AttributeItem {
   id: string;
+  position: number;
   value: string;
   displayValue: string;
   __typename: string;

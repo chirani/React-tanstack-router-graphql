@@ -145,40 +145,44 @@ const CartItem: React.FC<CartItemProps> = (props) => {
                 <p className="font-medium mb-2">{attr.id}</p>
                 {attr.id === 'Color' ? (
                   <div key={attr.id} className="flex flex-wrap gap-2">
-                    {attr.items.map((item: AttributeItem) => (
-                      <button
-                        key={item.id}
-                        onClick={() => handleSelect(attr.id, item.id)}
-                        data-testid={`product-attribute-color-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
-                        className={`border-3 p-1 ${
-                          selectedAttributes[attr.id] === item.id
-                            ? 'border-zinc-900'
-                            : 'border-zinc-200'
-                        }`}
-                      >
-                        <div
-                          className="size-6"
-                          style={{ backgroundColor: item.value }}
-                        />
-                      </button>
-                    ))}
+                    {attr.items
+                      .sort((a, b) => a.position - b.position)
+                      .map((item: AttributeItem) => (
+                        <button
+                          key={item.id}
+                          onClick={() => handleSelect(attr.id, item.id)}
+                          data-testid={`product-attribute-color-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
+                          className={`border-3 p-1 ${
+                            selectedAttributes[attr.id] === item.id
+                              ? 'border-zinc-900'
+                              : 'border-zinc-200'
+                          }`}
+                        >
+                          <div
+                            className="size-6"
+                            style={{ backgroundColor: item.value }}
+                          />
+                        </button>
+                      ))}
                   </div>
                 ) : (
                   <div key={attr.id} className="flex flex-wrap gap-2">
-                    {attr.items.map((item: AttributeItem) => (
-                      <button
-                        key={item.id}
-                        onClick={() => handleSelect(attr.id, item.id)}
-                        data-testid={`product-attribute-${attr.id}-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
-                        className={`px-3 py-1 border rounded ${
-                          selectedAttributes[attr.id] === item.id
-                            ? 'bg-black text-white'
-                            : ''
-                        }`}
-                      >
-                        {item.displayValue}
-                      </button>
-                    ))}
+                    {attr.items
+                      .sort((a, b) => a.position - b.position)
+                      .map((item: AttributeItem) => (
+                        <button
+                          key={item.id}
+                          onClick={() => handleSelect(attr.id, item.id)}
+                          data-testid={`product-attribute-${attr.id}-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
+                          className={`px-3 py-1 border rounded ${
+                            selectedAttributes[attr.id] === item.id
+                              ? 'bg-black text-white'
+                              : ''
+                          }`}
+                        >
+                          {item.displayValue}
+                        </button>
+                      ))}
                   </div>
                 )}
               </div>

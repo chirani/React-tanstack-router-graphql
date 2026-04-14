@@ -70,38 +70,42 @@ const OrderItem: React.FC<OrderItemProps> = (props) => {
             <p className="font-medium mb-2">{attr.id}</p>
             {attr.id === 'Color' ? (
               <div className="flex flex-wrap gap-2">
-                {attr.items.map((item: AttributeItem) => (
-                  <button
-                    key={item.id}
-                    onClick={() => handleSelect(attr.id, item.id)}
-                    className={`border-3 p-1 ${
-                      selectedAttributes[attr.id] === item.id
-                        ? 'border-zinc-900'
-                        : 'border-transparent'
-                    }`}
-                  >
-                    <div
-                      className="size-6"
-                      style={{ backgroundColor: item.value }}
-                    ></div>
-                  </button>
-                ))}
+                {attr.items
+                  .sort((a, b) => a.position - b.position)
+                  .map((item: AttributeItem) => (
+                    <button
+                      key={item.id}
+                      onClick={() => handleSelect(attr.id, item.id)}
+                      className={`border-3 p-1 ${
+                        selectedAttributes[attr.id] === item.id
+                          ? 'border-zinc-900'
+                          : 'border-transparent'
+                      }`}
+                    >
+                      <div
+                        className="size-6"
+                        style={{ backgroundColor: item.value }}
+                      ></div>
+                    </button>
+                  ))}
               </div>
             ) : (
               <div className="flex gap-2 flex-wrap">
-                {attr.items.map((item: AttributeItem) => (
-                  <button
-                    key={item.id}
-                    onClick={() => handleSelect(attr.id, item.id)}
-                    className={`px-3 py-1 border rounded ${
-                      selectedAttributes[attr.id] === item.id
-                        ? 'bg-black text-white'
-                        : ''
-                    }`}
-                  >
-                    {item.displayValue}
-                  </button>
-                ))}
+                {attr.items
+                  .sort((a, b) => a.position - b.position)
+                  .map((item: AttributeItem) => (
+                    <button
+                      key={item.id}
+                      onClick={() => handleSelect(attr.id, item.id)}
+                      className={`px-3 py-1 border rounded ${
+                        selectedAttributes[attr.id] === item.id
+                          ? 'bg-black text-white'
+                          : ''
+                      }`}
+                    >
+                      {item.displayValue}
+                    </button>
+                  ))}
               </div>
             )}
           </div>
