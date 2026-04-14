@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useCreateOrder } from '../queries/orders';
 import { useCartStore } from '../zustand/cart';
 import OrderItem from '../components/OrderItem';
@@ -59,9 +59,12 @@ const ShippingData = () => {
   if (isEmpty) {
     return (
       <div className="flex flex-row gap-3 p-3 justify-center">
-        <button className="bg-teal-800 text-white font-medium p-3 px-6 rounded-md hover:opacity-60 cursor-pointer animate-pulse">
+        <Link
+          to="/shipping-info"
+          className="bg-teal-800 text-white font-medium p-3 px-6 rounded-md hover:opacity-60 cursor-pointer animate-pulse"
+        >
           Add Shipping Data
-        </button>
+        </Link>
       </div>
     );
   }
