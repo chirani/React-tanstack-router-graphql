@@ -6,6 +6,11 @@ import { useEffect } from 'react';
 
 export const Route = createFileRoute('/$category')({
   component: RouteComponent,
+  head: ({ params }) => {
+    return {
+      meta: [{ title: `Home - ${params.category}` }],
+    };
+  },
 });
 
 function RouteComponent() {

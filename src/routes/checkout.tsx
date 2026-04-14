@@ -7,6 +7,9 @@ import { useShippingStore } from '../zustand/shippingAddress';
 
 export const Route = createFileRoute('/checkout')({
   component: RouteComponent,
+  head: () => ({
+    meta: [{ title: 'Checkout' }],
+  }),
 });
 
 function RouteComponent() {

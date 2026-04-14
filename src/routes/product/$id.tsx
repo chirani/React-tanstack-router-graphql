@@ -24,6 +24,7 @@ function RouteComponent() {
 
   useEffect(() => {
     if (data?.product.length) {
+      document.title = data?.product[0].name;
       let attrs = data.product[0]?.attributes;
       attrs.map((attr) => {
         setSelectedAttributes((prev) => ({

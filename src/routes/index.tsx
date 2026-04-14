@@ -15,6 +15,9 @@ export const Route = createFileRoute('/')({
     };
   },
   component: Index,
+  head: () => ({
+    meta: [{ title: 'Home' }],
+  }),
 });
 
 function Index() {
