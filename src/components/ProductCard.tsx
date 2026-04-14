@@ -62,6 +62,7 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
         <button
           className="invisible group-hover:visible hover:opacity-60 p-3 bg-teal-600 absolute rounded-full top-4 right-4 opacity-80 disabled:opacity-0"
           disabled={props.inStock}
+          data-testid="add-to-cart"
           onMouseDown={() => {
             onAddToCart();
             toggleCart(true);
