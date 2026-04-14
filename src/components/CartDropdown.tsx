@@ -55,7 +55,7 @@ const CartDropdown = () => {
           <div>{`${numberOfItems} ${numberOfItems === 1 ? ' Item' : ' Items'}`}</div>
           <div className="mt-4 border-t pt-2 flex justify-between">
             <span>Total:</span>
-            <span className="font-bold" data-testid={'cart-item-amount'}>
+            <span className="font-bold" data-testid="cart-total">
               ${Math.round(total * 100) / 100}
             </span>
           </div>
@@ -149,7 +149,7 @@ const CartItem: React.FC<CartItemProps> = (props) => {
                       <button
                         key={item.id}
                         onClick={() => handleSelect(attr.id, item.id)}
-                        data-testid={`product-attribute-color-${item.value}`}
+                        data-testid={`product-attribute-color-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
                         className={`border-3 p-1 ${
                           selectedAttributes[attr.id] === item.id
                             ? 'border-zinc-900'
@@ -169,7 +169,7 @@ const CartItem: React.FC<CartItemProps> = (props) => {
                       <button
                         key={item.id}
                         onClick={() => handleSelect(attr.id, item.id)}
-                        data-testid={`product-attribute-${attr.id}-${item.value}`}
+                        data-testid={`product-attribute-${attr.id}-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
                         className={`px-3 py-1 border rounded ${
                           selectedAttributes[attr.id] === item.id
                             ? 'bg-black text-white'
@@ -184,13 +184,21 @@ const CartItem: React.FC<CartItemProps> = (props) => {
               </div>
             ))}
           </div>
-          <p className="font-bold text-teal-900">${props.price.amount}</p>
+          <p className="font-bold text-teal-900" data-testid="cart-item-amount">
+            ${props.price.amount}
+          </p>
 
           <div className="py-2 flex flex-row justify-between">
             <div className="flex flex-row items-center">
-              <PlusSquareIcon onMouseDown={() => addToCart(props)} />
+              <button
+                data-testid="cart-item-amount-increase"
+                onMouseDown={() => addToCart(props)}
+              >
+                <PlusSquareIcon />
+              </button>
               <p className="p-2">{props.quantity}</p>
               <button
+                data-testid="cart-item-amount-decrease"
                 onMouseDown={() => {
                   removeFromCart(props);
                 }}
