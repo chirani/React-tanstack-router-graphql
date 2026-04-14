@@ -36,7 +36,7 @@ export default function ShippingForm() {
 
     setErrors({});
     setShipping(result.data);
-    navigate({ to: '/' });
+    navigate({ to: '/checkout' });
   };
 
   return (
