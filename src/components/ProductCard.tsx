@@ -20,7 +20,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = (props) => {
   const navigate = useNavigate();
-  const { addToCart } = useCartStore();
+  const { addToCart, toggleCart } = useCartStore();
   const { addToast } = useToastStore();
 
   const onAddToCart = () => {
@@ -54,15 +54,18 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
           alt={props.name}
           className="w-full hover:scale-80 transition duration-300 object-cover"
         />
-        <button
-          className="invisible group-hover:visible hover:opacity-60 p-3 bg-teal-600 absolute rounded-full top-4 right-4 opacity-80"
-          onMouseDown={() => {
-            onAddToCart();
-            addToast('Product Added To Cart', 'info');
-          }}
-        >
-          <ShoppingBag className="text-white" />
-        </button>
+        {props.inStock && (
+          <button
+            className="invisible group-hover:visible hover:opacity-60 p-3 bg-teal-600 absolute rounded-full top-4 right-4 opacity-80"
+            onMouseDown={() => {
+              onAddToCart();
+              toggleCart(true);
+              addToast('Product Added To Cart', 'info');
+            }}
+          >
+            <ShoppingBag className="text-white" />
+          </button>
+        )}
       </figure>
 
       <div className="flex flex-col">

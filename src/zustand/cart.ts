@@ -18,6 +18,8 @@ export type CartItem = {
 
 type CartStore = {
   cart: CartItem[];
+  isOpen: boolean;
+  toggleCart: (newState: boolean) => void;
   addToCart: (item: CartItem) => void;
   removeFromCart: (item: CartItem) => void;
   updateCartItem: (item: CartItem, newAttribute: AttributeSelection) => void;
@@ -32,7 +34,10 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       cart: [],
-
+      isOpen: false,
+      toggleCart: (newState) => {
+        set({ isOpen: newState });
+      },
       addToCart: (item) => {
         const cart = get().cart;
 

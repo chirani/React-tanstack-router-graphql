@@ -11,7 +11,7 @@ const ToastContainer: React.FC = () => {
   };
 
   return (
-    <div className="fixed top-10 right-10 z-510 flex flex-col gap-3 w-full max-w-xs">
+    <div className="fixed bottom-10 right-10 z-510 flex flex-col gap-3 w-full max-w-xs">
       {toasts.map((toast) => (
         <div
           key={toast.id}

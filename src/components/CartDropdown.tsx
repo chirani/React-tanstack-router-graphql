@@ -12,25 +12,13 @@ import { useProductData } from '../queries/products';
 import type { Attribute, AttributeItem } from '../graphql/queryTypes';
 
 const CartDropdown = () => {
-  const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const { cart } = useCartStore();
+  const { cart, toggleCart, isOpen } = useCartStore();
 
   const total = cart.reduce(
     (sum, item) => sum + item.price.amount * item.quantity,
     0
   );
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const numberOfItems: number = cart.reduce(
     (acc, curr) => acc + curr.quantity,
@@ -40,7 +28,7 @@ const CartDropdown = () => {
   return (
     <div className="relative" ref={ref}>
       <button
-        onClick={() => setOpen(!open)}
+        onClick={() => toggleCart(!isOpen)}
         className="relative px-4 py-2"
         data-testid="cart-btn"
       >
@@ -50,7 +38,7 @@ const CartDropdown = () => {
         />
       </button>
 
-      {open && (
+      {isOpen && (
         <div
           className="absolute right-0 mt-2 w-80 bg-white shadow-lg p-4 z-50"
           data-testid="cart-overlay"

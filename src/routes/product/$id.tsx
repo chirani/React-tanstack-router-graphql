@@ -12,7 +12,7 @@ export const Route = createFileRoute('/product/$id')({
 
 function RouteComponent() {
   const params = Route.useParams();
-  const { addToCart } = useCartStore();
+  const { addToCart, toggleCart } = useCartStore();
   const { addToast } = useToastStore();
   const [selectedImage, setSelectedImage] = useState<string>('');
   const [isFullDescription, toggleFullDescription] = useState(false);
@@ -75,6 +75,7 @@ function RouteComponent() {
       productContent: product.gallery.length ? product.gallery[0] : '',
     });
 
+    toggleCart(true);
     addToast('Product added to cart', 'info');
   };
 
