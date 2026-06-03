@@ -64,7 +64,7 @@ const ShippingData = () => {
       <div className="flex flex-row gap-3 p-3 justify-center">
         <Link
           to="/shipping-info"
-          className="bg-teal-800 text-white font-medium p-3 px-6 rounded-md hover:opacity-60 cursor-pointer animate-pulse"
+          className="bg-green-800 text-white font-medium p-3 px-6 rounded-md hover:opacity-60 cursor-pointer animate-pulse"
         >
           Add Shipping Data
         </Link>
@@ -89,7 +89,7 @@ const ShippingData = () => {
         onClick={() => {
           navigate({ to: '/shipping-info' });
         }}
-        className="p-4 bg-zinc-100 rounded-full hover:bg-teal-200"
+        className="p-4 bg-zinc-100 rounded-full hover:bg-green-200"
       >
         <Edit2Icon className="size-5" />
       </button>

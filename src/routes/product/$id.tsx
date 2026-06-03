@@ -99,19 +99,11 @@ function RouteComponent() {
   );
 
   return (
-    <main className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10">
-      <div>
-        <figure className="aspect-square w-full overflow-hidden rounded-md">
-          <img
-            src={selectedImage || product.gallery[0]}
-            alt={product.name}
-            className="max-h-full mx-auto object-cover"
-          />
-        </figure>
-
+    <main className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div className="col-span-2 flex flex-col-reverse sm:flex-row gap-1">
         <div
           data-testid="product-gallery"
-          className="flex gap-2 flex-wrap mt-3"
+          className="flex flex-row sm:flex-col gap-2 flex-wrap mt-3"
         >
           {product.gallery.map((img: string) => (
             <figure key={img} className="h-20 w-20">
@@ -123,12 +115,17 @@ function RouteComponent() {
             </figure>
           ))}
         </div>
+        <figure className="aspect-square w-full overflow-hidden">
+          <img
+            src={selectedImage || product.gallery[0]}
+            alt={product.name}
+            className="max-h-full mx-auto object-cover"
+          />
+        </figure>
       </div>
 
       <div className="flex flex-col gap-4">
         <h1 className="text-2xl font-semibold">{product.name}</h1>
-
-        <p className="text-xl font-bold">${product.prices[0].amount}</p>
 
         {product.attributes?.map((attr: Attribute) => (
           <div
@@ -137,7 +134,7 @@ function RouteComponent() {
           >
             <p className="font-medium mb-2">{attr.id}</p>
             {attr.id === 'Color' ? (
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {attr.items
                   .sort((a, b) => b.position - a.position)
                   .map((item: AttributeItem) => (
@@ -159,7 +156,7 @@ function RouteComponent() {
                   ))}
               </div>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {attr.items
                   .sort((a, b) => a.position - b.position)
                   .map((item: AttributeItem) => (
@@ -167,7 +164,7 @@ function RouteComponent() {
                       key={item.displayValue}
                       onClick={() => handleSelect(attr.id, item.id)}
                       data-testid={`product-attribute-${toKebabCase(attr.id)}-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
-                      className={`px-3 py-1 border rounded ${
+                      className={`px-4 py-1.5 border ${
                         selectedAttributes[attr.id] === item.id
                           ? 'bg-black text-white'
                           : ''
@@ -180,6 +177,19 @@ function RouteComponent() {
             )}
           </div>
         ))}
+
+        <p className="text-lg font-bold">PRICE</p>
+        <p className="text-2xl font-bold font-raleway">
+          ${product.prices[0].amount}
+        </p>
+        <button
+          data-testid="add-to-cart"
+          disabled={!product.inStock || isAttributeValueEmpty}
+          onMouseDown={() => onAddToCart()}
+          className="mt-4 bg-black disabled:bg-zinc-300 cursor-pointer text-white py-3 hover:opacity-80"
+        >
+          Add to Cart
+        </button>
         <p data-testid="product-description">{parse(rawContent)}</p>
         <button
           hidden={product.description.length < 199}
@@ -187,15 +197,6 @@ function RouteComponent() {
           className="text-blue-500 mt-2"
         >
           {isFullDescription ? 'Show Less' : 'Show More'}
-        </button>
-
-        <button
-          data-testid="add-to-cart"
-          disabled={!product.inStock || isAttributeValueEmpty}
-          onMouseDown={() => onAddToCart()}
-          className="mt-4 bg-black disabled:bg-zinc-300 cursor-pointer text-white py-3 rounded hover:opacity-80"
-        >
-          Add to Cart
         </button>
       </div>
     </main>

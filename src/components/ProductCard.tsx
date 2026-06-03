@@ -48,21 +48,21 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
 
   return (
     <div
-      className="p-3 shadow-sm rounded-lg flex flex-col gap-2 bg-white"
+      className="p-3 flex flex-col gap-2 bg-white hover:shadow-lg"
       data-testid={`product-${toKebabCase(props.name)}`}
     >
-      <figure className="group flex items-center justify-center aspect-square w-full overflow-hidden rounded-md relative">
+      <figure className="group flex items-center justify-center aspect-square w-full overflow-hidden relative">
         <img
           onMouseDown={() => {
             navigate({ to: '/product/$id', params: { id: props.id } });
           }}
           src={props.gallery[0]}
           alt={props.name}
-          className="w-full hover:scale-80 transition duration-300 object-cover"
+          className="max-h-full hover:scale-90 transition duration-300 object-cover"
         />
 
         <button
-          className="invisible group-hover:visible hover:opacity-60 p-3 bg-teal-600 absolute rounded-full top-4 right-4 opacity-80 disabled:opacity-0"
+          className="invisible group-hover:visible hover:opacity-60 p-3 bg-green-600 absolute rounded-full top-4 right-4 opacity-80 disabled:opacity-0"
           disabled={!props.inStock}
           data-testid="add-to-cart"
           onMouseDown={() => {
@@ -76,19 +76,11 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
       </figure>
 
       <div className="flex flex-col">
-        <h2 className="text-sm font-medium">{props.name}</h2>
+        <h2 className="text-lg text-zinc-600 font-medium">{props.name}</h2>
         <p className="text-lg font-semibold">
           {props.price.currency.symbol}
           {props.price.amount}
         </p>
-
-        <span
-          className={`text-xs self-end ${
-            props.inStock ? 'text-green-600' : 'text-red-500'
-          }`}
-        >
-          {props.inStock ? 'In stock' : 'Out of stock'}
-        </span>
       </div>
     </div>
   );
