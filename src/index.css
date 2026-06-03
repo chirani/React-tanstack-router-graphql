@@ -1,11 +1,17 @@
 @import 'tailwindcss';
+@import '@fontsource/raleway';
+@import '@fontsource-variable/roboto-condensed/wght.css';
 
+@theme {
+  --font-raleway: 'Raleway', sans-serif;
+  --font-robotocon: 'Roboto Condensed Variable', sans-serif;
+}
 .input {
-  @apply py-3 px-6 border border-zinc-200 outline-teal-300;
+  @apply py-3 px-6 border border-zinc-200 outline-green-300;
 }
 
 .btn {
-  @apply py-3 px-6 bg-zinc-900 text-white font-medium hover:opacity-60 cursor-pointer active:bg-teal-900 rounded;
+  @apply py-3 px-6 bg-zinc-900 text-white font-medium hover:opacity-60 cursor-pointer active:bg-green-900;
 }
 
 .error {
