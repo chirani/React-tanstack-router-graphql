@@ -3,6 +3,7 @@ import { useStoreData } from '../queries/products';
 import ProductCard from '../components/ProductCard';
 import { useEffect } from 'react';
 import { useStoreCategory } from '../zustand/category';
+import { capitalizeFirstLetter } from '../utils/strings';
 
 type IndexSearch = {
   category?: string;
@@ -33,17 +34,21 @@ function Index() {
   }, [search.category]);
 
   return (
-    <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-300 my-12 mx-auto">
-      <h1 className="hidden">Product List</h1>
-      {ProductList.map((product) => {
-        return (
-          <ProductCard
-            key={product.id}
-            {...product}
-            price={product.prices[0]}
-          />
-        );
-      })}
+    <main className="max-w-300 my-12 mx-auto">
+      <h1 className="font-raleway text-3xl mb-8">
+        {capitalizeFirstLetter(search?.category ?? 'all')}
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {ProductList.map((product) => {
+          return (
+            <ProductCard
+              key={product.id}
+              {...product}
+              price={product.prices[0]}
+            />
+          );
+        })}
+      </div>
     </main>
   );
 }
