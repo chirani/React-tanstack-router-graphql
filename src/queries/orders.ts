@@ -33,11 +33,17 @@ export const useCreateOrder = () => {
         quantity: item.quantity,
       }));
 
+      const total = items.reduce(
+        (acc, item) => acc + item.quantity * item.price_amount,
+        0
+      );
+
       const order: CreateOrder = {
         name: shipping.name,
         email: shipping.email,
         address: shipping.address,
         currencyId: cart[0].price.currency.label,
+        total,
         message: '',
         items,
       };

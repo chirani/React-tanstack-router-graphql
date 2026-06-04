@@ -4,6 +4,7 @@ export type CreateOrder = {
   address: string;
   message: string;
   currencyId: string;
+  total: number;
   items: {
     productId: string;
     quantity: number;
