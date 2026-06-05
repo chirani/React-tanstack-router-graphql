@@ -90,7 +90,7 @@ interface CartItemProps extends CartItem {}
 
 const CartItem: React.FC<CartItemProps> = (props) => {
   const { productId } = props;
-  const { addToCart, removeFromCart, updateCartItem, cart } = useCartStore();
+  const { addToCart, removeFromCart, cart } = useCartStore();
   const [selectedAttributes, setSelectedAttributes] = useState<
     Record<string, string>
   >({});
@@ -110,17 +110,6 @@ const CartItem: React.FC<CartItemProps> = (props) => {
       });
     }
   }, [data, cart]);
-
-  const handleSelect = (attrId: string, itemId: string) => {
-    setSelectedAttributes((prev) => ({
-      ...prev,
-      [attrId]: itemId,
-    }));
-    updateCartItem(props, {
-      attributeId: attrId,
-      attributeValueId: itemId,
-    });
-  };
 
   if (isLoading) {
     return <div className="p-6">Loading...</div>;
@@ -157,17 +146,12 @@ const CartItem: React.FC<CartItemProps> = (props) => {
                 {attr.id === 'Color' ? (
                   <div key={attr.id} className="flex flex-wrap gap-2">
                     {attr.items
-                      .sort((a, b) => a.position - b.position)
+                      .filter((item) => item.id === selectedAttributes[attr.id])
                       .map((item: AttributeItem) => (
                         <button
                           key={item.id}
-                          onClick={() => handleSelect(attr.id, item.id)}
                           data-testid={`product-attribute-color-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
-                          className={`border-3 p-1 ${
-                            selectedAttributes[attr.id] === item.id
-                              ? 'border-zinc-900'
-                              : 'border-zinc-200'
-                          }`}
+                          className="border-2 border-black text-white"
                         >
                           <div
                             className="size-6"
@@ -179,17 +163,12 @@ const CartItem: React.FC<CartItemProps> = (props) => {
                 ) : (
                   <div key={attr.id} className="flex flex-wrap gap-2">
                     {attr.items
-                      .sort((a, b) => a.position - b.position)
+                      .filter((item) => item.id === selectedAttributes[attr.id])
                       .map((item: AttributeItem) => (
                         <button
                           key={item.id}
-                          onClick={() => handleSelect(attr.id, item.id)}
                           data-testid={`product-attribute-${toKebabCase(attr.id)}-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
-                          className={`px-3 py-1 border rounded ${
-                            selectedAttributes[attr.id] === item.id
-                              ? 'bg-black text-white'
-                              : ''
-                          }`}
+                          className="px-3 py-1 border rounded bg-black text-white"
                         >
                           {item.displayValue}
                         </button>
