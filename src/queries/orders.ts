@@ -3,7 +3,6 @@ import { type CreateOrder } from '../graphql/mutationTypes';
 import { useMutation } from '@tanstack/react-query';
 import { CREATE_ORDER_MUTATION } from '../graphql/mutationGraph';
 import { useCartStore } from '../zustand/cart';
-import { useShippingStore } from '../zustand/shippingAddress';
 import useToastStore from '../zustand/toast';
 import { endpoint } from '.';
 
@@ -20,7 +19,6 @@ export async function createOrder(order: CreateOrder) {
 
 export const useCreateOrder = () => {
   const { cart } = useCartStore();
-  const { shipping } = useShippingStore();
   const { addToast } = useToastStore();
 
   return useMutation({
@@ -39,12 +37,8 @@ export const useCreateOrder = () => {
       );
 
       const order: CreateOrder = {
-        name: shipping.name,
-        email: shipping.email,
-        address: shipping.address,
         currencyId: cart[0].price.currency.label,
         total,
-        message: '',
         items,
       };
 

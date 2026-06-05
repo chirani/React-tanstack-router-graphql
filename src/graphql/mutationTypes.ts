@@ -1,8 +1,4 @@
 export type CreateOrder = {
-  email: string;
-  name: string;
-  address: string;
-  message: string;
   currencyId: string;
   total: number;
   items: {

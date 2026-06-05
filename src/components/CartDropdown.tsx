@@ -1,18 +1,18 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useCartStore, type CartItem } from '../zustand/cart';
 import {
   MinusSquareIcon,
   PlusSquareIcon,
-  ShoppingBag,
+  ShoppingCart,
   TrashIcon,
 } from 'lucide-react';
 import { toKebabCase } from '../utils/strings';
-import { Link } from '@tanstack/react-router';
 import { useProductData } from '../queries/products';
 import type { Attribute, AttributeItem } from '../graphql/queryTypes';
+import { useCreateOrder } from '../queries/orders';
 
 const CartDropdown = () => {
-  const ref = useRef<HTMLDivElement>(null);
+  const { mutateAsync: checkout, isPending: isOrderPending } = useCreateOrder();
   const { cart, toggleCart, isOpen } = useCartStore();
 
   const total = cart.reduce(
@@ -27,13 +27,13 @@ const CartDropdown = () => {
 
   return (
     <>
-      <div className="relative" ref={ref}>
+      <div className="relative">
         <button
           onClick={() => toggleCart(!isOpen)}
           className="relative z-50 px-4 py-2"
           data-testid="cart-btn"
         >
-          <ShoppingBag
+          <ShoppingCart
             className="text-zinc-900 cursor-pointer hover:text-green-600 hover:opacity-60"
             size={28}
           />
@@ -49,7 +49,10 @@ const CartDropdown = () => {
               className="absolute right-0 mt-2 w-80 bg-white shadow-lg p-4 z-50"
               data-testid="cart-overlay"
             >
-              <h3 className="font-bold mb-3">My Cart</h3>
+              <h3 className="font-bold mb-3">
+                My Cart
+                <span className="font-regular">{`${numberOfItems} ${numberOfItems === 1 ? ' Item' : ' Items'}`}</span>
+              </h3>
 
               {cart.length === 0 && <p>Your cart is empty</p>}
 
@@ -58,7 +61,7 @@ const CartDropdown = () => {
                   <CartItem key={index} {...item} />
                 ))}
               </div>
-              <div>{`${numberOfItems} ${numberOfItems === 1 ? ' Item' : ' Items'}`}</div>
+
               <div className="mt-4 border-t pt-2 flex justify-between">
                 <span>Total:</span>
                 <span className="font-bold" data-testid="cart-total">
@@ -67,13 +70,13 @@ const CartDropdown = () => {
               </div>
 
               <div className="flex mt-3">
-                <Link
-                  disabled={!Boolean(total)}
-                  to="/checkout"
-                  className="bg-black text-center text-white px-3 py-2 w-full active:bg-green-700"
+                <button
+                  disabled={!Boolean(total || isOrderPending)}
+                  onMouseDown={() => checkout()}
+                  className="bg-black text-center cursor-pointer hover: text-white px-3 py-2 w-full disabled:bg-gray-300 active:bg-green-700"
                 >
-                  Checkout
-                </Link>
+                  {!isOrderPending ? 'Order Now' : '...Loading'}
+                </button>
               </div>
             </div>
           </>
