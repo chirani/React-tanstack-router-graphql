@@ -61,7 +61,7 @@ const CartDropdown = () => {
             >
               <h3 className="font-bold mb-3">
                 My Cart
-                <span className="font-regular">{`${numberOfItems} ${numberOfItems === 1 ? ' Item' : ' Items'}`}</span>
+                <span className="font-light">{` (${numberOfItems} ${numberOfItems === 1 ? ' Item' : ' Items'})`}</span>
               </h3>
 
               {cart.length === 0 && <p>Your cart is empty</p>}
@@ -154,34 +154,34 @@ const CartItem: React.FC<CartItemProps> = (props) => {
               >
                 <p className="font-medium mb-2">{attr.id}</p>
                 {attr.id === 'Color' ? (
-                  <div key={attr.id} className="flex flex-wrap gap-2">
+                  <div key={attr.id}>
                     {attr.items
                       .filter((item) => item.id === selectedAttributes[attr.id])
                       .map((item: AttributeItem) => (
-                        <button
+                        <div
                           key={item.id}
-                          data-testid={`product-attribute-color-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
-                          className="border-2 border-black text-white"
+                          data-testid={`product-attribute-color-${item.value}-selected`}
+                          className="inline-block border-2 border-black text-white"
                         >
                           <div
                             className="size-6"
                             style={{ backgroundColor: item.value }}
                           />
-                        </button>
+                        </div>
                       ))}
                   </div>
                 ) : (
-                  <div key={attr.id} className="flex flex-wrap gap-2">
+                  <div key={attr.id}>
                     {attr.items
                       .filter((item) => item.id === selectedAttributes[attr.id])
                       .map((item: AttributeItem) => (
-                        <button
+                        <div
                           key={item.id}
-                          data-testid={`product-attribute-${toKebabCase(attr.id)}-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
-                          className="px-3 py-1 border rounded bg-black text-white"
+                          data-testid={`product-attribute-${toKebabCase(attr.id)}-selected`}
+                          className="inline-block px-3 py-1 border rounded bg-black text-white"
                         >
                           {item.displayValue}
-                        </button>
+                        </div>
                       ))}
                   </div>
                 )}
