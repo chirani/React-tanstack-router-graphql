@@ -20,6 +20,7 @@ export async function createOrder(order: CreateOrder) {
 export const useCreateOrder = () => {
   const { cart } = useCartStore();
   const { addToast } = useToastStore();
+  const { clearCart } = useCartStore();
 
   return useMutation({
     mutationKey: ['create-order'],
@@ -43,9 +44,12 @@ export const useCreateOrder = () => {
       };
 
       const newOrder = await createOrder(order);
-      addToast('Products Ordered!');
 
       return newOrder;
+    },
+    onSuccess: () => {
+      addToast('Products Ordered!');
+      clearCart();
     },
   });
 };

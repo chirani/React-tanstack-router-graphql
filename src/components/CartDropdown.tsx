@@ -12,7 +12,11 @@ import type { Attribute, AttributeItem } from '../graphql/queryTypes';
 import { useCreateOrder } from '../queries/orders';
 
 const CartDropdown = () => {
-  const { mutateAsync: checkout, isPending: isOrderPending } = useCreateOrder();
+  const {
+    mutate: createOrder,
+    isPending: isOrderPending,
+    isSuccess,
+  } = useCreateOrder();
   const { cart, toggleCart, isOpen } = useCartStore();
 
   const total = cart.reduce(
@@ -24,6 +28,12 @@ const CartDropdown = () => {
     (acc, curr) => acc + curr.quantity,
     0
   );
+
+  useEffect(() => {
+    if (isSuccess) {
+      toggleCart(false);
+    }
+  }, [isSuccess]);
 
   return (
     <>
@@ -72,7 +82,7 @@ const CartDropdown = () => {
               <div className="flex mt-3">
                 <button
                   disabled={!Boolean(total || isOrderPending)}
-                  onMouseDown={() => checkout()}
+                  onMouseDown={() => createOrder()}
                   className="bg-black text-center cursor-pointer hover: text-white px-3 py-2 w-full disabled:bg-gray-300 active:bg-green-700"
                 >
                   {!isOrderPending ? 'Order Now' : '...Loading'}
