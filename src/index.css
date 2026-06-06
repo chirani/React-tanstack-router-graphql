@@ -11,7 +11,7 @@
 }
 
 .btn {
-  @apply py-3 px-6 bg-zinc-900 text-white font-medium hover:opacity-60 cursor-pointer active:bg-green-900;
+  @apply py-3 px-6 bg-green-500 text-white font-medium hover:opacity-60 cursor-pointer active:bg-green-900;
 }
 
 .error {

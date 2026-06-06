@@ -125,8 +125,14 @@ function RouteComponent() {
       </div>
 
       <div className="flex flex-col gap-4">
-        <h1 className="text-2xl font-semibold">{product.name}</h1>
-
+        <div>
+          <h1 className="text-2xl font-semibold">{product.name}</h1>
+          <p
+            className={`text-sm font-medium ${product.inStock ? 'text-green-600' : 'text-red-600'}`}
+          >
+            {product.inStock ? 'Stock Available' : 'Out of Stock'}
+          </p>
+        </div>
         {product.attributes?.map((attr: Attribute) => (
           <div
             key={attr.id}
@@ -141,7 +147,7 @@ function RouteComponent() {
                     <button
                       key={item.displayValue}
                       onClick={() => handleSelect(attr.id, item.id)}
-                      data-testid={`product-attribute-color-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
+                      data-testid={`product-attribute-color-${item.value}-${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
                       className={`p-0.5 border-3 ${
                         selectedAttributes[attr.id] === item.id
                           ? 'border-zinc-900'
@@ -186,7 +192,7 @@ function RouteComponent() {
           data-testid="add-to-cart"
           disabled={!product.inStock || isAttributeValueEmpty}
           onMouseDown={() => onAddToCart()}
-          className="mt-4 bg-black disabled:bg-zinc-300 cursor-pointer text-white py-3 hover:opacity-80"
+          className="mt-4 bg-green-600 font-medium disabled:bg-zinc-300 cursor-pointer text-white py-3 hover:opacity-80"
         >
           Add to Cart
         </button>
