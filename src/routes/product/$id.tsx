@@ -147,7 +147,7 @@ function RouteComponent() {
                     <button
                       key={item.displayValue}
                       onClick={() => handleSelect(attr.id, item.id)}
-                      data-testid={`product-attribute-color-${item.value}-${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
+                      data-testid={`product-attribute-color-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
                       className={`p-0.5 border-3 ${
                         selectedAttributes[attr.id] === item.id
                           ? 'border-zinc-900'
