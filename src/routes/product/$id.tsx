@@ -99,8 +99,8 @@ function RouteComponent() {
   );
 
   return (
-    <main className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-10">
-      <div className="col-span-2 flex flex-col-reverse sm:flex-row gap-1">
+    <main className="max-w-6xl mx-auto p-6 flex flex-col md:flex-row gap-10">
+      <div className="flex flex-col-reverse sm:flex-row md:flex-2 gap-1">
         <div
           data-testid="product-gallery"
           className="flex flex-row sm:flex-col gap-2 flex-wrap mt-3"
@@ -124,7 +124,7 @@ function RouteComponent() {
         </figure>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 md:flex-1 self-stretch">
         <div>
           <h1 className="text-2xl font-semibold">{product.name}</h1>
           <p

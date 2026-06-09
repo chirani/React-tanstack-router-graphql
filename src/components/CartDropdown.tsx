@@ -45,8 +45,13 @@ const CartDropdown = () => {
         >
           <ShoppingCart
             className="text-zinc-900 cursor-pointer hover:text-green-600 hover:opacity-60"
-            size={28}
+            size={32}
           />
+          {!!numberOfItems && (
+            <span className="absolute top-1 right-2 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-zinc-800 rounded-full">
+              {numberOfItems}
+            </span>
+          )}
         </button>
 
         {isOpen && (
@@ -160,7 +165,7 @@ const CartItem: React.FC<CartItemProps> = (props) => {
                       .map((item: AttributeItem) => (
                         <div
                           key={item.id}
-                          data-testid={`product-attribute-color-${item.value}-selected`}
+                          data-testid={`product-attribute-color-${item.value}`}
                           className="inline-block border-2 border-black text-white"
                         >
                           <div
@@ -177,7 +182,7 @@ const CartItem: React.FC<CartItemProps> = (props) => {
                       .map((item: AttributeItem) => (
                         <div
                           key={item.id}
-                          data-testid={`product-attribute-${toKebabCase(attr.id)}-selected`}
+                          data-testid={`product-attribute-${toKebabCase(attr.id)}-${toKebabCase(item.value)}`}
                           className="inline-block px-3 py-1 border rounded bg-black text-white"
                         >
                           {item.displayValue}
