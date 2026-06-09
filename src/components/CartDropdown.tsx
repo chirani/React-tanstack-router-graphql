@@ -159,34 +159,42 @@ const CartItem: React.FC<CartItemProps> = (props) => {
               >
                 <p className="font-medium mb-2">{attr.id}</p>
                 {attr.id === 'Color' ? (
-                  <div key={attr.id}>
+                  <div key={attr.id} className="flex flex-wrap gap-2">
                     {attr.items
-                      .filter((item) => item.id === selectedAttributes[attr.id])
+                      .sort((a, b) => a.position - b.position)
                       .map((item: AttributeItem) => (
-                        <div
+                        <button
                           key={item.id}
-                          data-testid={`product-attribute-color-${item.value}`}
-                          className="inline-block border-2 border-black text-white"
+                          data-testid={`product-attribute-color-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
+                          className={`border-3 p-1 ${
+                            selectedAttributes[attr.id] === item.id
+                              ? 'border-zinc-900'
+                              : 'border-zinc-200'
+                          }`}
                         >
                           <div
                             className="size-6"
                             style={{ backgroundColor: item.value }}
                           />
-                        </div>
+                        </button>
                       ))}
                   </div>
                 ) : (
-                  <div key={attr.id}>
+                  <div key={attr.id} className="flex flex-wrap gap-2">
                     {attr.items
-                      .filter((item) => item.id === selectedAttributes[attr.id])
+                      .sort((a, b) => a.position - b.position)
                       .map((item: AttributeItem) => (
-                        <div
+                        <button
                           key={item.id}
-                          data-testid={`product-attribute-${toKebabCase(attr.id)}-${toKebabCase(item.value)}`}
-                          className="inline-block px-3 py-1 border rounded bg-black text-white"
+                          data-testid={`product-attribute-${toKebabCase(attr.id)}-${item.value}${selectedAttributes[attr.id] === item.id ? '-selected' : ''}`}
+                          className={`px-3 py-1 border rounded ${
+                            selectedAttributes[attr.id] === item.id
+                              ? 'bg-black text-white'
+                              : ''
+                          }`}
                         >
                           {item.displayValue}
-                        </div>
+                        </button>
                       ))}
                   </div>
                 )}
