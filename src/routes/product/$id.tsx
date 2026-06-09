@@ -118,8 +118,8 @@ function RouteComponent() {
             </figure>
           ))}
         </div>
-        <div className="aspect-square w-full relative">
-          <figure className="aspect-square w-full overflow-hidden">
+        <div className="relative">
+          <figure className="aspect-square overflow-hidden">
             <img
               src={gallery[selectedImage] || product.gallery[0]}
               alt={product.name}
