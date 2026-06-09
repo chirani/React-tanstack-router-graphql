@@ -6,6 +6,7 @@ import type { Attribute, AttributeItem } from '../../graphql/queryTypes';
 import { getPreviewText, toKebabCase } from '../../utils/strings';
 import { useCartStore } from '../../zustand/cart';
 import useToastStore from '../../zustand/toast';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const Route = createFileRoute('/product/$id')({
   component: RouteComponent,
@@ -15,7 +16,7 @@ function RouteComponent() {
   const params = Route.useParams();
   const { addToCart, toggleCart } = useCartStore();
   const { addToast } = useToastStore();
-  const [selectedImage, setSelectedImage] = useState<string>('');
+  const [selectedImage, setSelectedImage] = useState<number>(0);
   const [isFullDescription, toggleFullDescription] = useState(false);
   const [selectedAttributes, setSelectedAttributes] = useState<
     Record<string, string>
@@ -98,30 +99,55 @@ function RouteComponent() {
     (sav) => sav === ''
   );
 
+  const gallery = product.gallery;
+
   return (
     <main className="max-w-6xl mx-auto p-6 flex flex-col md:flex-row gap-10">
-      <div className="flex flex-col-reverse sm:flex-row md:flex-2 gap-1">
+      <div className="flex flex-col-reverse md:flex-row md:flex-2 gap-1">
         <div
           data-testid="product-gallery"
-          className="flex flex-row sm:flex-col gap-2 flex-wrap mt-3"
+          className="flex flex-row md:flex-col gap-2 flex-wrap mt-3"
         >
-          {product.gallery.map((img: string) => (
+          {product.gallery.map((img: string, imgIndex) => (
             <figure key={img} className="h-20 w-20">
               <img
                 src={img}
-                onClick={() => setSelectedImage(img)}
+                onClick={() => setSelectedImage(imgIndex)}
                 className="max-h-20 object-cover cursor-pointer hover:opacity-70"
               />
             </figure>
           ))}
         </div>
-        <figure className="aspect-square w-full overflow-hidden">
-          <img
-            src={selectedImage || product.gallery[0]}
-            alt={product.name}
-            className="max-h-full mx-auto object-cover"
-          />
-        </figure>
+        <div className="aspect-square w-full relative">
+          <figure className="aspect-square w-full overflow-hidden">
+            <img
+              src={gallery[selectedImage] || product.gallery[0]}
+              alt={product.name}
+              className="max-h-full mx-auto object-cover"
+            />
+          </figure>
+
+          {selectedImage > 0 && (
+            <ChevronLeft
+              onMouseDown={() => {
+                selectedImage > 0 ? setSelectedImage(selectedImage - 1) : 0;
+              }}
+              size={40}
+              className="bg-zinc-800 p-2 rounded absolute left-0 top-1/2 -translate-y-1/2 z-300 hover:opacity-80 text-white"
+            />
+          )}
+          {selectedImage < gallery.length - 1 && (
+            <ChevronRight
+              onMouseDown={() => {
+                selectedImage < gallery.length - 1
+                  ? setSelectedImage(selectedImage + 1)
+                  : gallery.length - 1;
+              }}
+              size={40}
+              className="bg-zinc-800 p-2 rounded absolute right-0 top-1/2 -translate-y-1/2 z-300 hover:opacity-80 text-white"
+            />
+          )}
+        </div>
       </div>
 
       <div className="flex flex-col gap-4 md:flex-1 self-stretch">
