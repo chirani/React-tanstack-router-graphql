@@ -61,7 +61,7 @@ const CartDropdown = () => {
               onClick={() => toggleCart(false)}
             />
             <div
-              className="absolute right-0 mt-2 w-80 bg-white shadow-lg p-4 z-50"
+              className="absolute right-0 mt-2 min-w-70 w-96 bg-white shadow-lg p-4 z-50"
               data-testid="cart-overlay"
             >
               <h3 className="font-bold mb-3">
@@ -143,12 +143,6 @@ const CartItem: React.FC<CartItemProps> = (props) => {
   return (
     <div data-testid={`cart-item-attribute-${toKebabCase(props.name)}`}>
       <div className="flex flex-row gap-3">
-        <figure className="size-18 min-w-18">
-          <img
-            src={props.productContent}
-            className="w-full h-full object-cover"
-          />
-        </figure>
         <div className="flex flex-col flex-1">
           <p className="font-semibold">{props.name}</p>
           <div className="text-sm text-zinc-700 flex flex-col flex-wrap mb-2">
@@ -207,26 +201,33 @@ const CartItem: React.FC<CartItemProps> = (props) => {
           >
             ${props.price.amount}
           </p>
+        </div>
 
-          <div className="py-2 flex flex-row justify-between">
-            <div className="flex flex-row items-center">
-              <button
-                data-testid="cart-item-amount-increase"
-                onMouseDown={() => addToCart(props)}
-              >
-                <PlusSquareIcon />
-              </button>
-              <p className="p-2">{props.quantity}</p>
-              <button
-                data-testid="cart-item-amount-decrease"
-                onMouseDown={() => {
-                  removeFromCart(props);
-                }}
-              >
-                {props.quantity > 1 ? <MinusSquareIcon /> : <TrashIcon />}
-              </button>
-            </div>
+        <div className="flex flex-row gap-1 self-start">
+          <div className="flex flex-col justify-between">
+            <button
+              data-testid="cart-item-amount-increase"
+              onMouseDown={() => addToCart(props)}
+            >
+              <PlusSquareIcon />
+            </button>
+            <p className="p-2 text-lg">{props.quantity}</p>
+            <button
+              data-testid="cart-item-amount-decrease"
+              onMouseDown={() => {
+                removeFromCart(props);
+              }}
+            >
+              {props.quantity > 1 ? <MinusSquareIcon /> : <TrashIcon />}
+            </button>
           </div>
+
+          <figure className="size-32 min-w-18">
+            <img
+              src={props.productContent}
+              className="w-full h-full object-cover"
+            />
+          </figure>
         </div>
       </div>
     </div>
