@@ -118,7 +118,7 @@ function RouteComponent() {
             </figure>
           ))}
         </div>
-        <div className="relative">
+        <div className="relative md:flex-1">
           <figure className="aspect-square overflow-hidden">
             <img
               src={gallery[selectedImage] || product.gallery[0]}
