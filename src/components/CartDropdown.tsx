@@ -61,7 +61,7 @@ const CartDropdown = () => {
               onClick={() => toggleCart(false)}
             />
             <div
-              className="absolute right-0 mt-2 min-w-70 w-96 bg-white shadow-lg p-4 z-50"
+              className="absolute right-0 mt-2 w-75 sm:w-96 bg-white shadow-lg p-4 z-50"
               data-testid="cart-overlay"
             >
               <h3 className="font-bold mb-3">

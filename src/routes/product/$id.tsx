@@ -133,7 +133,7 @@ function RouteComponent() {
                 selectedImage > 0 ? setSelectedImage(selectedImage - 1) : 0;
               }}
               size={40}
-              className="bg-zinc-800 p-2 rounded absolute left-0 top-1/2 -translate-y-1/2 z-300 hover:opacity-80 text-white"
+              className="bg-zinc-800 p-2 rounded absolute left-0 top-1/2 -translate-y-1/2 z-49 hover:opacity-80 text-white"
             />
           )}
           {selectedImage < gallery.length - 1 && (
@@ -144,7 +144,7 @@ function RouteComponent() {
                   : gallery.length - 1;
               }}
               size={40}
-              className="bg-zinc-800 p-2 rounded absolute right-0 top-1/2 -translate-y-1/2 z-300 hover:opacity-80 text-white"
+              className="bg-zinc-800 p-2 rounded absolute right-0 top-1/2 -translate-y-1/2 z-49 hover:opacity-80 text-white"
             />
           )}
         </div>
